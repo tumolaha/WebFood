@@ -1,3 +1,4 @@
+
 <?php
 require __DIR__ . '/header.php';
 require __DIR__ . '/Sidebar.php';
@@ -7,6 +8,7 @@ require __DIR__ . '/Sidebar.php';
   <div class="">
     <h1 class="text-2xl font-bold text-black">Quản lý nguyên vật liệu</h1>
   </div>
+
 
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-2">

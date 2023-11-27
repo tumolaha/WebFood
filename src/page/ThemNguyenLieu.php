@@ -1,3 +1,4 @@
+
 <?php
 require __DIR__ . '/header.php';
 require __DIR__ . '/Sidebar.php';
@@ -25,6 +26,7 @@ if (isset($_POST['submit'])) {
     die("Connection failed: " . $conn->connect_error);
   }
 
+
   $ma_nguyen_lieu = $_POST['ma_nguyen_lieu'];
 
   // Check if MaNL already exists
@@ -50,6 +52,7 @@ if (isset($_POST['submit'])) {
 
   $conn->close();
 }  ?>
+
 
 <form method="post" action="ThemNguyenLieu.php">
   <div class="relative z-0 w-full mb-6 group">
