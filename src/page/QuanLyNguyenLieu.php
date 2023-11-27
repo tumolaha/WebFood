@@ -171,7 +171,7 @@
             $servername = "localhost";
             $username = "root";
             $password = "";
-            $dbname = "web-food";
+            $dbname = "food_store";
 
             // Create connection
             $conn = new mysqli($servername, $username, $password, $dbname);
