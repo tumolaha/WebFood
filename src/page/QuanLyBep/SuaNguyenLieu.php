@@ -1,32 +1,18 @@
-
 <?php
-require __DIR__ . '/header.php';
-require __DIR__ . '/Sidebar.php';
+require __DIR__ . '../../header.php';
+require __DIR__ . '../../Sidebar.php';
 ?>
 <div class="w-full flex item-center justify-between">
     <div>
         <h5 class="text-xl font-bold text-black">Thêm Nguyên Vật Liệu</h5>
 
     </div>
-    <div>
-
-    </div>
 </div>
 <div class="w-full py-6"></div>
 <?php
-
+require_once __DIR__ . '../../dbConnection.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editNguyenLieu'])) {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "web-food";
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    require_once __DIR__ . '../../dbConnection.php';
 
     $ma_nguyen_lieu = $_POST['ma_nguyen_lieu'];
 
@@ -46,18 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editNguyenLieu'])) {
 
 
     $conn->close();
-}  ?>
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "web-food";
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
 }
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -103,4 +77,4 @@ $conn->close();
         Sửa Nguyên Liệu
     </button>
 </form>
-<?php require __DIR__ . '/footer.php'; ?>
+<?php require __DIR__ . '../../Footer.php'; ?>

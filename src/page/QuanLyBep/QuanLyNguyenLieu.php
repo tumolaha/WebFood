@@ -1,7 +1,6 @@
-
 <?php
-require __DIR__ . '/header.php';
-require __DIR__ . '/Sidebar.php';
+require __DIR__ . '../../header.php';
+require __DIR__ . '../../QuanLyBep/SiderbarQuanLyBep.php';
 ?>
 <div class="w-full">
   <!-- content -->
@@ -18,43 +17,34 @@ require __DIR__ . '/Sidebar.php';
     </div>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase text-center bg-gray-300">
-        <tr>
-
-          <th scope="col" class="px-6 py-3">
-            STT
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Tên Nguyên Liệu
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Số lượng tồn trong kho
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Ngày cập nhật
-          </th>
-          <th scope="col" class="px-6 py-3">
-
-          </th>
-        </tr>
+        <th scope="col" class="px-6 py-3">
+          Mã Nguyên Liệu
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Tên Nguyên Liệu
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Số lượng tồn trong kho
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Ngày cập nhật
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Giá
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Đơn vị tính
+        </th>
+        <th scope="col" class="relative px-6 py-3">
+          <span class="sr-only">Edit</span>
+          </tr>
       </thead>
       <tbody>
         <!-- delete -->
 
         <!-- render table -->
         <?php
-
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "web-food";
-
-        // Create connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Check connection
-        if ($conn->connect_error) {
-          die("Connection failed: " . $conn->connect_error);
-        }
+        require_once __DIR__ . '../../dbConnection.php';
         // Define how many results you want per page
         $results_per_page = 10;
 
@@ -90,6 +80,8 @@ require __DIR__ . '/Sidebar.php';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["SoLuong"] . '</td>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["NgayNhap"] . '</td>';
+            echo '<td class="px-6 py-4 text-gray-900">' . $row["Gia"] . '</td>';
+            echo '<td class="px-6 py-4 text-gray-900">' . $row["DonViTinh"] . '</td>';
             echo '<td class="px-6 flex gap-2 py-4 text-gray-900 font-bold">';
             echo '<a href="./SuaNguyenLieu.php?id=' . $row["MaNL"] . '" class="font-medium text-blue-600 hover:underline">Sửa</a>';
             echo '<button type="button" class="font-medium text-red-600 hover:underline" onclick="openModal(' . $row['MaNL'] . ')">Xoá</button>';
@@ -106,6 +98,7 @@ require __DIR__ . '/Sidebar.php';
           $sql = "DELETE FROM nguyenlieu WHERE MaNL='$id'";
           if ($conn->query($sql) === TRUE) {
             echo "Record deleted successfully";
+            echo '<script> location.replace("QuanLyNguyenLieu.php"); </script>';
           } else {
             echo "Error deleting record: " . $conn->error;
           }
@@ -132,22 +125,7 @@ require __DIR__ . '/Sidebar.php';
       }
       ?>
     </div>
-    <!-- button -->
-    <!-- <div class="inline-flex mt-2 xs:mt-0 mr-12s">
 
-                            <button class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 rounded-l hover:bg-gray-900 ">
-                              <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
-                              </svg>
-                              Prev
-                            </button>
-                            <button class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 ">
-                              Next
-                              <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                              </svg>
-                            </button>
-                          </div> -->
   </div>
 
   <!-- Modal -->
@@ -207,4 +185,4 @@ require __DIR__ . '/Sidebar.php';
   </script>
 </div>
 <!-- end content -->
-<?php require __DIR__ . '/footer.php'; ?>
+<?php require __DIR__ . '../../footer.php'; ?>
