@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2023 at 04:52 AM
+-- Generation Time: Nov 29, 2023 at 04:04 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -30,8 +30,16 @@ SET time_zone = "+00:00";
 CREATE TABLE `dexuatmonan` (
   `TenMon` varchar(255) NOT NULL,
   `MaNV` int(11) DEFAULT NULL,
-  `MaMon` int(11) DEFAULT NULL
+  `MaMon` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dexuatmonan`
+--
+
+INSERT INTO `dexuatmonan` (`TenMon`, `MaNV`, `MaMon`, `status`) VALUES
+('Bò Beefsteak', 0, 7, NULL);
 
 -- --------------------------------------------------------
 
@@ -46,8 +54,16 @@ CREATE TABLE `dondatmon` (
   `NgayDat` date DEFAULT NULL,
   `TongTien` float DEFAULT NULL,
   `TrangThai` varchar(255) DEFAULT NULL,
-  `DanhGia` int(11) DEFAULT NULL
+  `DanhGia` int(11) DEFAULT NULL,
+  `soluong` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dondatmon`
+--
+
+INSERT INTO `dondatmon` (`MaDon`, `MaNV`, `MaMon`, `NgayDat`, `TongTien`, `TrangThai`, `DanhGia`, `soluong`) VALUES
+(0, 1, 7, '2023-11-29', 200000, '0', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -56,10 +72,19 @@ CREATE TABLE `dondatmon` (
 --
 
 CREATE TABLE `menu` (
-  `MaMon` int(11) NOT NULL,
+  `MaMon` int(11) DEFAULT NULL,
   `MaNL` int(11) DEFAULT NULL,
-  `ngayban` date DEFAULT NULL
+  `ngayban` date DEFAULT NULL,
+  `MaMenu` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `menu`
+--
+
+INSERT INTO `menu` (`MaMon`, `MaNL`, `ngayban`, `MaMenu`) VALUES
+(2, 4, '2023-11-29', 2),
+(7, 2, '2023-11-29', 9);
 
 -- --------------------------------------------------------
 
@@ -77,6 +102,14 @@ CREATE TABLE `monan` (
   `ngaytao` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `monan`
+--
+
+INSERT INTO `monan` (`MaMon`, `TenMon`, `DonGia`, `HinhMinhHoa`, `CongThuc`, `trangthai`, `ngaytao`) VALUES
+(2, 'Bún chả', 60000, 0x62756e6368612e6a7067, 'Thịt heo, bún, nước mắm, rau sống', 1, '2023-11-28'),
+(7, 'Bò Beefsteak', 100000, 0x443a2f6170702f646576656c6f706d656e742f78616d70702f6874646f63732f776562666f6f642f7372632f75706c6f6164732f4f49502e6a7067, 'Công thức', 1, '2023-11-29');
+
 -- --------------------------------------------------------
 
 --
@@ -91,6 +124,14 @@ CREATE TABLE `nguyenlieu` (
   `Gia` float DEFAULT NULL,
   `DonViTinh` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `nguyenlieu`
+--
+
+INSERT INTO `nguyenlieu` (`MaNL`, `TenNL`, `SoLuong`, `NgayNhap`, `Gia`, `DonViTinh`) VALUES
+(2, 'bánh mì', 20, '2023-11-28', 1000, 'kg'),
+(4, 'gà móng đỏ', 10, '2023-11-28', 1000, 'kg');
 
 -- --------------------------------------------------------
 
@@ -107,6 +148,14 @@ CREATE TABLE `nhanvien` (
   `GioiTinh` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `nhanvien`
+--
+
+INSERT INTO `nhanvien` (`MaNV`, `MaTK`, `TenNV`, `SDT`, `Email`, `GioiTinh`) VALUES
+(0, 1, 'nguyễn văn tú', '0969022375', 'admin@example.com', '1'),
+(1, 2, 'nguyễn văn thanh sang', '0969022375', '20110591@student.hcmute.edu.vn', '1');
+
 -- --------------------------------------------------------
 
 --
@@ -119,6 +168,14 @@ CREATE TABLE `taikhoan` (
   `Password` varchar(255) DEFAULT NULL,
   `PhanQuyen` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `taikhoan`
+--
+
+INSERT INTO `taikhoan` (`MaTK`, `Username`, `Password`, `PhanQuyen`) VALUES
+(1, 'john_doe', 'hashed_password', '1'),
+(2, 'jane_smith', 'another_hashed_password', '2');
 
 --
 -- Indexes for dumped tables
@@ -143,8 +200,9 @@ ALTER TABLE `dondatmon`
 -- Indexes for table `menu`
 --
 ALTER TABLE `menu`
-  ADD PRIMARY KEY (`MaMon`),
-  ADD KEY `FK_menu_nguyenlieu` (`MaNL`);
+  ADD PRIMARY KEY (`MaMenu`),
+  ADD KEY `FK_menu_nguyenlieu` (`MaNL`),
+  ADD KEY `menu_ibfk_1` (`MaMon`);
 
 --
 -- Indexes for table `monan`
