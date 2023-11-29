@@ -9,11 +9,13 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 </head>
 
 <body>
-    <!-- header -->
+
     <?php include_once("header.php"); ?>
     <div class="flex w-screen bg-blue-100/30">
         <!-- sidebar -->
