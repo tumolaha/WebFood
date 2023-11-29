@@ -16,6 +16,19 @@ $number_of_results = mysqli_num_rows($result);
 // Determine number of total pages available
 $number_of_pages = ceil($number_of_results / $results_per_page);
 
+// Function to update the status of an order
+
+// Handle the form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $orderId = $_POST['maMon'];
+    $status = $_POST['trangThai'];
+
+    // Call the updateOrderStatus function
+    $sql = "UPDATE dondatmon SET TrangThai = '$status' WHERE MaDon = '$orderId'";
+    mysqli_query($conn, $sql);
+}
+
+
 ?>
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
@@ -50,11 +63,12 @@ $number_of_pages = ceil($number_of_results / $results_per_page);
 
                 // Add the approve button
                 echo "<td class='py-3 px-6 text-left'>";
-                echo "<form method='POST'  action='../../Page/QuanLy/DuyetPhieuDeXuatMon.php' class='flex flex-nowrap'>";
+                echo "<form method='POST'  action='../../page/PhucVu/CapNhatTrangThaiDatMon.php' class='flex flex-nowrap'>";
                 echo "<input type='hidden' name='maMon' value='" . $menuRow['MaMon'] . "'>";
                 echo "<select name='trangThai'>";
                 echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
-                echo "<option value='1' " . ($menuRow['TrangThai'] == 1 ? "selected" : "") . ">Đã giao</option>";
+                echo "<option value='1' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">huỷ đơn</option>";
+                echo "<option value='1' " . ($menuRow['TrangThai'] == 3 ? "selected" : "") . ">Đã giao</option>";
                 echo "</select>";
                 echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
                 echo "</form>";

@@ -16,10 +16,24 @@ require_once __DIR__ . '../../dbConnection.php';
 if (isset($_POST['edit'])) {
   $MaNV = $_POST['edit_id'];
   $query = "SELECT * FROM NhanVien WHERE MaNV='$MaNV'";
-  $query_run = mysqli_query($connection, $query);
+  $query_run = mysqli_query($conn, $query);
+}
+if (isset($_POST["editEmployee"])) {
+  $MaNV = $_POST["MaNV"];
+  $MaTK = $_POST["MaTK"];
+  $TenNv = $_POST["TenNV"];
+  $GioiTinh = ($_POST["GioiTinh"]) ? $_POST["GioiTinh"] : 0;
+  $SDT = $_POST["SDT"];
+  $Email = $_POST["Email"];
+
+  $sqlInsert = "update  NhanVien set MaTK='$MaTK', TenNV='$TenNv', GioiTinh='$GioiTinh', SDT='$SDT', Email='$Email' WHERE MaNV='$MaNV'";
+  Mysqli_query($conn, $sqlInsert) or die("Lỗi thêm mới sản phẩm" . $sqlInsert);
+  header("location:../page/QuanLy/QuanLyNhanVien.php");
+  // echo $sqlInsert;
+
 }
 ?>
-<form action="../php/Employee.php" method="post" data-parsley-validate="" enctype="multipart/form-data">
+<form action="SuaNhanvVien.php" method="post" data-parsley-validate="" enctype="multipart/form-data">
   <?php
   if (mysqli_num_rows($query_run) > 0) {
     while ($row = mysqli_fetch_assoc($query_run)) {
