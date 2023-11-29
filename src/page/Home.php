@@ -26,7 +26,7 @@
             <form method="POST">
                 <div class="flex cursor-pointer items-center gap-2 justify-center">
                     <p class="font-bold">Chọn ngày</p>
-                    <input type="text" class="border-2 p-1" id="datepicker" name="datepicker" value=<?php echo date("d/m/Y"); ?>
+                    <input type="text" class="border-2 p-1" id="datepicker" name="datepicker" value="<?php echo date("d/m/Y"); ?>"
                         placeholder="Select a date">
                     <svg id="datepicker-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
                         viewBox="0 0 256 256">
@@ -41,7 +41,12 @@
                     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
                     <script>
                         $(function () {
-                            $("#datepicker").datepicker();
+                            $("#datepicker").datepicker({
+                                dateFormat: 'dd/mm/yy',
+                                onSelect: function (dateText, inst) {
+                                    $(this).val(dateText);
+                                }
+                            });
                             $("#datepicker-icon").click(function () {
                                 $("#datepicker").datepicker("show");
                             });
@@ -54,47 +59,51 @@
             <div class="grid grid-cols-3 gap-4">
                 <?php
                 include("dbConnection.php");
-                $date = date("Y-m-d");
 
                 if (isset($_POST['submit']) ) {
                     $date = DateTime::createFromFormat('d/m/Y', $_POST['datepicker']);
                     $date = $date->format('Y-m-d');
+                
+                    $sql = "SELECT monan.* FROM monan JOIN menu ON monan.MaMon = menu.MaMon WHERE menu.ngayban = ? AND monan.trangthai = 1";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("s", $date);
+                    $stmt->execute();
                     
-                }
-                //set giá trị của datepicker là = $date
-                echo '<script>document.getElementById("datepicker").value = "' . date("d/m/Y", strtotime($date)) . '"</script>';
-
-                $sql = "SELECT monan.* FROM monan JOIN menu ON monan.MaMon = menu.MaMon WHERE menu.ngayban = ? AND monan.trangthai = 1";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $date);
-                $stmt->execute();
-
-                $result = $stmt->get_result();
-
-                //loop and display each item
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<div class="w-[250px]  bg-white border border-gray-200 rounded-lg shadow ">';
-                        echo '<a href="order.php?id=' . $row['MaMon'] . '">';
-                        echo '<img class="p-8 rounded-t-lg" src="' . $row['HinhMinhHoa'] . '" alt="product image" />';
-                        echo '</a>';
-                        echo '<div class="px-5 pb-5">';
-                        echo '<a href="order.php?id=' . $row['MaMon'] . '">';
-                        echo '<h5 class="text-sm font-semibold tracking-tight text-gray-900 ">' . $row['TenMon'] . '</h5>';
-                        echo '</a>';
-                        
-                        echo '<div class="flex items-center justify-between">';
-                        echo '<span class="text-sm font-bold text-gray-900 ">' . $row['DonGia'] . ' VNĐ</span>';
-                        
-                        echo '</div>';
-                        echo '</div>';
+                    $result = $stmt->get_result();
+                    
+                    //loop and display each item
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $imagePath = $row['HinhMinhHoa'];
+                            $url = str_replace('C:\\xampp\\htdocs\\WebFood', 'http://localhost/webfood', $imagePath);
+                            $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
+                            echo '<div class="w-[250px]  h-[300px] bg-white border border-gray-400 rounded-lg shadow ">';
+                            echo '<a href="order.php?id=' . $row['MaMon'] . '">';
+                            echo '<img class="p-8 rounded-t-lg" src="' . $url . '" alt="Image" />';
+                            echo '</a>';
+                            echo '<div class="flex justify-between">';
+                            echo '<div class="px-5 flex flex-col items-center justify-center pb-5">';
+                            echo '<a href="order.php?id=' . $row['MaMon'] . '">';
+                            echo '<h5 class="text-sm font-semibold tracking-tight text-gray-900 ">' . $row['TenMon'] . '</h5>';
+                            echo '</a>';
+                            
+                            echo '<div class="flex items-center justify-between">';
+                            echo '<span class="text-sm font-bold text-gray-900 ">' . $row['DonGia'] . ' VNĐ</span>';
+                            
+                            echo '</div>';
+                            echo '</div>';
+                            echo '<a href="order.php?id=' . $row['MaMon'] . '" class="h-10 text-sm cursor-pointer w-20 rounded-lg text-center pt-2 bg-green-500 mr-2 text-white ">Mua Hàng</a>';
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<div class="w-full flex justify-center text-center text-gray-500 mt-8">';
+                        echo 'Không có thực đơn cho ngày này.';
                         echo '</div>';
                     }
-                } else {
-                    echo '<div class="w-full flex justify-center text-center text-gray-500 mt-8">';
-                    echo 'Không có thực đơn cho ngày này.';
-                    echo '</div>';
                 }
+                
+
                 ?>
             </div>
         </section>

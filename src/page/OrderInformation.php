@@ -73,7 +73,9 @@
                         $total = 0;
                         $list = array();
                         while ($row = mysqli_fetch_assoc($result)) {
-
+                            $imagePath = $row['HinhMinhHoa'];
+                            $url = str_replace('C:\\xampp\\htdocs\\WebFood', 'http://localhost/webfood', $imagePath);
+                            $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
                             $id = $row['MaMon'];
                             $sql1 = "SELECT * FROM monan WHERE MaMon = $id";
                             $result1 = mysqli_query($conn, $sql1);
@@ -84,7 +86,7 @@
                             echo '
                         <tr class="bg-white border-b  hover:bg-gray-50 ">
                             <td class="w-32 p-4">
-                                <img src="' . $row1['HinhMinhHoa'] . '" alt="Apple Watch">
+                                <img src="' . $url . '" alt="Apple Watch">
                             </td>
                             <td class="px-6 py-4 font-semibold text-gray-900 ">
                                 ' . $row1['TenMon'] . '

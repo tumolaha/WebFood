@@ -30,16 +30,33 @@
             <?php
             // lấy vnp_OrderInfo từ url
             include 'dbConnection.php';
-            $vnp_OrderInfo = $_GET['vnp_OrderInfo'];
-            $idList = explode("|", $vnp_OrderInfo)[0];
-            $query = "UPDATE dondatmon SET trangthai = 1 WHERE MaDon IN ($idList)";
+            $idList = array();
+$vnp_OrderInfo = $_GET['vnp_OrderInfo'];
+$parts = explode("/", $vnp_OrderInfo);
+$tokenPosition = array_search('token', $parts);
 
-            $result = mysqli_query($conn, $sql);
-            if ($result) {
-                echo "<script>alert('Đặt món thành công')</script>";
-            } else {
-                echo "<script>alert('Đặt món thất bại')</script>";
-            }
+if ($tokenPosition !== false) {
+    $idList = array_slice($parts, 0, $tokenPosition);
+} else {
+    $idList = $parts;
+}
+
+// Ensure that $idList contains only numbers
+$idList = array_filter($idList, 'is_numeric');
+
+// Convert the array of IDs to a string for the SQL query
+$idListString = implode(',', $idList);
+
+if (!empty($idList)) {
+    $query = "UPDATE dondatmon SET trangthai = 1 WHERE MaDon IN ($idListString)";
+    $result = mysqli_query($conn, $query);
+    if ($result) {
+        echo "<script>alert('Đặt món thành công')</script>";
+    } else {
+        echo "<script>alert('Đặt món thất bại')</script>";
+    }
+}
+
 
             ?>
             <section class="content w-full px-10 py-5">
