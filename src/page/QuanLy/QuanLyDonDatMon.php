@@ -55,17 +55,25 @@ $selected_date = isset($_GET['date']) ? $_GET['date'] : '';
                     echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaMon'] . "</td>";
                     echo "<td class='py-3 px-6 text-left'>" . $menuRow['NgayDat'] . "</td>";
                     echo "<td class='py-3 px-6 text-left'>" . $menuRow['TongTien'] . "</td>";
-                    echo "<td class='py-3 px-6 text-left'>" . $menuRow['TrangThai'] . "</td>";
+                    echo "<td class='py-3 px-6 text-left'>";
+
+                    // Render order status
+                    if ($menuRow['TrangThai'] == 0) {
+                        echo "<span class='bg-yellow-500 text-white py-1 px-2 rounded'>Đã đặt</span>";
+                    } elseif ($menuRow['TrangThai'] == 2) {
+                        echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
+                    } elseif ($menuRow['TrangThai'] == 1) {
+                        echo "<span class='bg-red-500 text-white py-1 px-2 rounded'>Đã hủy</span>";
+                    }
+
+                    echo "</td>";
                     echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . "</td>";
 
                     // Add the approve button
                     echo "<td class='py-3 px-6 text-left'>";
 
-                    echo "<select name='trangThai'>";
-                    echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
-                    echo "<option value='1' " . ($menuRow['TrangThai'] == 1 ? "selected" : "") . ">Đã giao</option>";
-                    echo "<option value='1' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
-                    echo "</select>";
+
+
 
                     echo "</td>";
 

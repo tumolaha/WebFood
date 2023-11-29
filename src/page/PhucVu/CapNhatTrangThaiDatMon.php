@@ -20,12 +20,14 @@ $number_of_pages = ceil($number_of_results / $results_per_page);
 
 // Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $orderId = $_POST['maMon'];
+    $orderId = $_POST['maDon'];
     $status = $_POST['trangThai'];
-
+    echo $orderId;
+    echo $status;
     // Call the updateOrderStatus function
     $sql = "UPDATE dondatmon SET TrangThai = '$status' WHERE MaDon = '$orderId'";
     mysqli_query($conn, $sql);
+    header("Location: ./CapNhatTrangThaiDatMon.php");
 }
 
 
@@ -50,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
             <?php
-            // Loop through menu data
+
             while ($menuRow = mysqli_fetch_assoc($result)) {
                 echo "<tr>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaDon'] . "</td>";
@@ -58,17 +60,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaMon'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['NgayDat'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['TongTien'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $menuRow['TrangThai'] . "</td>";
+                echo "<td class='py-3 px-6 text-left'>";
+
+                // Render order status
+                if ($menuRow['TrangThai'] == 0) {
+                    echo "<span class='bg-yellow-500 text-white py-1 px-2 rounded'>Đã đặt</span>";
+                } elseif ($menuRow['TrangThai'] == 2) {
+                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
+                } elseif ($menuRow['TrangThai'] == 1) {
+                    echo "<span class='bg-red-500 text-white py-1 px-2 rounded'>Đã hủy</span>";
+                }
+
+                echo "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . "</td>";
 
                 // Add the approve button
                 echo "<td class='py-3 px-6 text-left'>";
-                echo "<form method='POST'  action='../../page/PhucVu/CapNhatTrangThaiDatMon.php' class='flex flex-nowrap'>";
-                echo "<input type='hidden' name='maMon' value='" . $menuRow['MaMon'] . "'>";
+                echo "<form method='POST'  action='CapNhatTrangThaiDatMon.php' class='flex flex-nowrap'>";
+                echo "<input type='hidden' name='maDon' value='" . $menuRow['MaDon'] . "'>";
                 echo "<select name='trangThai'>";
                 echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
-                echo "<option value='1' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">huỷ đơn</option>";
-                echo "<option value='1' " . ($menuRow['TrangThai'] == 3 ? "selected" : "") . ">Đã giao</option>";
+                echo "<option value='1' " . ($menuRow['TrangThai'] == 1 ? "selected" : "") . ">Huỷ đơn</option>";
+                echo "<option value='2' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
                 echo "</select>";
                 echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
                 echo "</form>";

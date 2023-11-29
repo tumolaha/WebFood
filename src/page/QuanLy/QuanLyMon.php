@@ -83,11 +83,21 @@ if (!isset($_GET['page'])) {
             if ($result->num_rows > 0) {
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
+                    $imagePath = $row['HinhMinhHoa'];
+
+                    $srcPosition = strpos($imagePath, 'src');
+                    if ($srcPosition !== false) {
+                        $imagePath = substr($imagePath, $srcPosition);
+                    }
+
+                    $url = 'http://localhost/webfood/' . $imagePath;
+                    $url = str_replace('\\', '/', $url);
+
                     echo '<tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-500 text-center dark:hover:bg-gray-300">';
                     echo '<td scope="row"  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaMon"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["TenMon"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["DonGia"] . '</td>';
-                    echo '<td class="px-6 py-4 text-gray-900">' . $row["HinhMinhHoa"] . '</td>';
+                    echo '<td class="px-6 py-4 text-gray-900"> <img class="p-8 rounded-t-lg" src="' . $url . '" alt="Image" /></td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["CongThuc"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["trangthai"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["ngaytao"] . '</td>';

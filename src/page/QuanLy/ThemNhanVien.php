@@ -20,7 +20,7 @@ if (isset($_POST["addNew"])) {
   } else {
     $sqlInsert = "INSERT INTO NhanVien(MaNV, MaTK, TenNV, SDT, Email, GioiTinh) VALUES('$MaNV', '$MaTK', '$TenNv', '$SDT', '$Email', '$GioiTinh')";
     mysqli_query($conn, $sqlInsert) or die("Lỗi thêm mới sản phẩm" . $sqlInsert);
-    header("location:../page/QuanLy/QuanLyNhanVien.php");
+    header("location:../QuanLy/QuanLyNhanVien.php");
   }
   // echo $sqlInsert;
 }

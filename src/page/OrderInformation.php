@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wed Food</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
@@ -74,7 +73,13 @@
                         $list = array();
                         while ($row = mysqli_fetch_assoc($result)) {
                             $imagePath = $row['HinhMinhHoa'];
-                            $url = str_replace('C:\\xampp\\htdocs\\WebFood', 'http://localhost/webfood', $imagePath);
+
+                            $srcPosition = strpos($imagePath, 'src');
+                            if ($srcPosition !== false) {
+                                $imagePath = substr($imagePath, $srcPosition);
+                            }
+
+                            $url = 'http://localhost/webfood/' . $imagePath;
                             $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
                             $id = $row['MaMon'];
                             $sql1 = "SELECT * FROM monan WHERE MaMon = $id";
@@ -117,16 +122,13 @@
                 </p>
 
                 <div class="px-6 py-4">
-                    <button type="button" onclick="openModal('cancelModal')"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy</button>
-                    <button type="button" onclick="openModal('approveModal')"
-                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Thanh
+                    <button type="button" onclick="openModal('cancelModal')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy</button>
+                    <button type="button" onclick="openModal('approveModal')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Thanh
                         Toán</button>
                 </div>
             </div>
 
-            <div id="cancelModal"
-                class="modal hidden fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div id="cancelModal" class="modal hidden fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div class="modal-content bg-white p-4 rounded-lg">
                     <h2>Xác nhận hủy đơn hàng</h2>
                     <p>Bạn có chắc chắn muốn hủy đơn hàng này?</p>
@@ -134,17 +136,14 @@
                     <form method="post">
                         <input type="hidden" name="cancelId" value="<?php echo $id ?>">
                         <div class="flex items-center justify-center gap-5">
-                            <button type="submit" name="confirmCancel"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy</button>
-                            <button type="button" onclick="closeModal('cancelModal')"
-                                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Đóng</button>
+                            <button type="submit" name="confirmCancel" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy</button>
+                            <button type="button" onclick="closeModal('cancelModal')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Đóng</button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div id="approveModal"
-                class="modal hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-gray-700 ">
+            <div id="approveModal" class="modal hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-gray-700 ">
                 <div class="modal-content bg-white p-4 flex flex-col  rounded-lg px-10">
                     <h2 class="text-2xl border-b-2 border-yellow-500">Thông tin thanh toán</h2>
                     <p class="mt-10">Thông tin các món ăn</p>
@@ -167,8 +166,7 @@
                     <form method="post">
                         <input type="hidden" name="approveId" value="<?php echo $id ?>">
                         <div class="flex items-center justify-center my-3 mx-auto gap-5 w-[90%]">
-                            <button type="submit" name="confirmApprove"
-                                class="text-black w-full border-[1px] border-gray-800  font-bold py-2 px-4 rounded">Trả
+                            <button type="submit" name="confirmApprove" class="text-black w-full border-[1px] border-gray-800  font-bold py-2 px-4 rounded">Trả
                                 khi
                                 nhận hàng</button>
                         </div>
@@ -176,16 +174,14 @@
                     <form method="post" action="vnpay.php?MaDon=<?php echo $id ?>">
                         <div class="flex items-center justify-center my-3 mx-auto gap-5 w-[90%]">
                             <input type="hidden" name="approveId" value="<?php echo $id ?>">
-                            <button type="submit" name="redirect"
-                                class="text-black w-full border-[1px] border-gray-800  font-bold py-2 px-4 rounded">Thanh
+                            <button type="submit" name="redirect" class="text-black w-full border-[1px] border-gray-800  font-bold py-2 px-4 rounded">Thanh
                                 Toán
                                 qua VNPAY</button>
                         </div>
                     </form>
                     <form method="post">
                         <div class="flex items-center justify-center my-3 mx-auto gap-5 w-[90%]">
-                            <button type="submit" name="cancelApprove" onclick="closeModal('approveModal')"
-                                class="bg-gray-500 w-full hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Đóng</button>
+                            <button type="submit" name="cancelApprove" onclick="closeModal('approveModal')" class="bg-gray-500 w-full hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Đóng</button>
                         </div>
                     </form>
                 </div>
