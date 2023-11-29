@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wed food</title>
 </head>
+
 <body>
     <section class="header w-screen ">
         <nav class="bg-gray-800 ">
@@ -29,12 +31,11 @@
                         <div class="ml-4 flex items-center md:ml-6">
                             <?php
                             session_start();
-                            $user = $_SESSION['user'];
-                            if($user){
+                            if (isset($_SESSION['user'])) {
+                                $user = $_SESSION['user'];
                                 echo "<h5 class='text-sm text-white font-medium'>$user</h5>";
-                            }
-                            else{
-                                echo  '<button class="cursor-pointer group relative flex gap-1.5 px-8 py-2 bg-blue-300 bg-opacity-50 text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 transition font-semibold shadow-md"> login </button>';
+                            } else {
+                                echo '<a href="/webfood/src/page/login.php" class="cursor-pointer group relative flex gap-1.5 px-8 py-2 bg-blue-300 bg-opacity-50 text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 transition font-semibold shadow-md"> login </a>';
                             }
 
                             ?>
@@ -45,4 +46,5 @@
         </nav>
     </section>
 </body>
+
 </html>
