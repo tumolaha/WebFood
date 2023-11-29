@@ -11,15 +11,29 @@ if (isset($_POST['addNewThucDon'])) {
     $maNguyenLieu = $_POST['MaNL'];
     $ngayBan = $_POST['ngayban'];
 
+    // Check if the MaMenu already exists in the database
+    $sql = "SELECT COUNT(*) as count FROM menu WHERE MaMenu = '$maMenu'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $count = $row['count'];
+
+    if ($count > 0) {
+        // MaMenu already exists, display an error message or redirect to an error page
+        echo "ma thực đơn tồn tại!";
+    } else {
+        $sql = "INSERT INTO menu (MaMenu, MaMon, MaNL, ngayban) VALUES ('$maMenu', '$maMon', '$maNguyenLieu', '$ngayBan')";
+        // Execute the SQL query
+        mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+        // Redirect to a success page or display a success message
+        header("Location: ../../page/QuanLy/QuanLyThucDon.php");
+        exit;
+    }
+
+
     // TODO: Insert the menu into the database
     // Replace the following code with your database insertion logic
-    $sql = "INSERT INTO menu (MaMenu, MaMon, MaNL, ngayban) VALUES ('$maMenu', '$maMon', '$maNguyenLieu', '$ngayBan')";
-    // Execute the SQL query
-    mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
-    // Redirect to a success page or display a success message
-    header("Location: ../../page/QuanLyBep/QuanLyThucDon.php");
-    exit;
 }
 
 // Get the list of "ma_mon" values from the table

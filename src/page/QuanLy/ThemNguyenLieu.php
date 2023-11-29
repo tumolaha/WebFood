@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '../../header.php';
-require __DIR__ . '/SiderbarQuanLyBep.php';
+require __DIR__ . '/SidebarQuanLy.php';
 ?>
 <div class="w-full flex item-center justify-between">
   <div>
