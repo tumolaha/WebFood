@@ -29,7 +29,7 @@
         $vnp_HashSecret = "PJSLLDYELYVGDFBUUBHNDUQMNIFDXVBJ"; //Chuỗi bí mật
     
         $vnp_TxnRef = rand(00, 9999); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
-        $vnp_OrderInfo = $ids . '|' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT); //mô tả đơn hàng
+        $vnp_OrderInfo = $ids . 'token' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT); //mô tả đơn hàng
         $vnp_OrderType = "billpayment";
         $vnp_Amount = $total * 100;
         $vnp_Locale = 'vn';

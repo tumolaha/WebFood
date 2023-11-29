@@ -6,6 +6,9 @@ if (isset($_GET['id'])) {
     $sql = "SELECT * FROM monan WHERE MaMon = $id";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
+    $imagePath = $row['HinhMinhHoa'];
+                            $url = str_replace('C:\\xampp\\htdocs\\WebFood', 'http://localhost/webfood', $imagePath);
+                            $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
 }
 
 if (isset($_POST['submit'])) {
@@ -13,6 +16,7 @@ if (isset($_POST['submit'])) {
     $amount = $_POST['input'];
     $query = "INSERT INTO `dondatmon`( `MaMon`, `SoLuong`, `TongTien`,`NgayDat`,`TrangThai`,`MaNV`) VALUES ( $id, $amount, $amount * $row[DonGia],'$date',0,1)";
     $result = mysqli_query($conn, $query);
+    
     if ($result) {
         echo "<script>alert('Đặt món thành công')</script>";
     } else {
@@ -40,9 +44,9 @@ if (isset($_POST['submit'])) {
     <div class="flex w-screen bg-blue-100/30">
         <?php include_once("EmployeeSidebar.php"); ?>
         <section class="content w-full px-10 py-5">
+            <form method="post">
             <div class="my-10 flex">
-                <form method="post">
-                    <img class="w-[350px] h-[300px] rounded-lg" src="<?php echo $row['HinhMinhHoa']; ?>" alt="">
+                    <img class="w-[350px] h-[300px] rounded-lg" src="<?php echo $url; ?>" alt="">
                     <div class="m-auto ">
                         <p class="text-3xl font-bold">
                             <?php echo $row['TenMon']; ?>
