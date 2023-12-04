@@ -8,8 +8,20 @@ require_once __DIR__ . '../../dbConnection.php';
 // Define how many results you want per page
 $results_per_page = 10;
 
+// Filter by employee ID
+$employeeId = $_GET['employeeId'] ?? '';
+
+// Filter by date
+$date = $_GET['date'] ?? '';
+
 // Find out the number of results stored in database
-$sql = 'SELECT * FROM dondatmon';
+$sql = "SELECT * FROM dondatmon";
+if (!empty($employeeId)) {
+    $sql .= " WHERE MaNV = '$employeeId'";
+}
+if (!empty($date)) {
+    $sql .= " AND NgayDat = '$date'";
+}
 $result = mysqli_query($conn, $sql);
 $number_of_results = mysqli_num_rows($result);
 
@@ -36,6 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
 </div>
 <div class="content flex-1 mt-2 ml-8">
+    <form method="GET" action="CapNhatTrangThaiDatMon.php" class="mb-4">
+        <label for="employeeId" class="mr-2">Mã nhân viên:</label>
+        <input type="text" name="employeeId" id="employeeId" value="<?php echo $employeeId; ?>">
+        <label for="date" class="mr-2 ml-4">Ngày đặt:</label>
+        <input type="date" name="date" id="date" value="<?php echo $date; ?>">
+        <button type="submit">Lọc</button>
+    </form>
 
     <table class="table-auto w-full">
         <thead>
@@ -80,7 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<input type='hidden' name='maDon' value='" . $menuRow['MaDon'] . "'>";
                 echo "<select name='trangThai'>";
                 echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
-                echo "<option value='1' " . ($menuRow['TrangThai'] == 1 ? "selected" : "") . ">Huỷ đơn</option>";
                 echo "<option value='2' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
                 echo "</select>";
                 echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";

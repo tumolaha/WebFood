@@ -1,11 +1,6 @@
 <?php
 // Connect to the database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "food_store";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+require_once "../page/dbConnection.php";
 
 // Check connection
 if ($conn->connect_error) {
@@ -15,10 +10,6 @@ if ($conn->connect_error) {
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
-    $username = $_POST["username"];
-    $email = $_POST["email"];
-    $phone = $_POST["phone"];
-    $password = $_POST["password"];
 
     // Validate form data
     $errors = array();
@@ -67,12 +58,14 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
     <section class="bg-blue-400/20 ">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -108,4 +101,5 @@ $conn->close();
         </div>
     </section>
 </body>
+
 </html>
