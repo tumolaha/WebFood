@@ -31,6 +31,19 @@
                 echo "<script>alert('Đánh giá thất bại')</script>";
             }
         }
+        $sql = "SELECT * FROM dondatmon join monan on dondatmon.MaMon = monan.MaMon WHERE dondatmon.trangthai = 1";
+                        $result = mysqli_query($conn, $sql);
+                        $total = 0;
+                        $list = array();
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $id = $row['MaMon'];
+                            $sql1 = "SELECT * FROM monan WHERE MaMon = $id";
+                            $result1 = mysqli_query($conn, $sql1);
+                            $row1 = mysqli_fetch_assoc($result1);
+                            $total += ($row['DonGia'] * $row['soluong']);
+                            array_push($list, array($row1['TenMon'], $row['soluong'], $row['DonGia']));
+                        }
+
         ?>
         <!-- content -->
         <section class="content w-full px-10 py-5">
@@ -112,12 +125,84 @@
                     </tbody>
                 </table>
             </div>
-            <div class="flex justify-end px-5 py-5">
-
-                <p class="text-xl">
-                    Tổng tiền:
+            <div class="flex flex-col items-end py-5 px-2 justify-end">
+                <p class="mr-5">Tổng số tiền :
                     <?php echo $total ?>
                 </p>
+
+                <div class="px-6 py-4">
+                    <button type="button" onclick="openModalThanhToan('cancelModal')"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy</button>
+                    <button type="button" onclick="openModalThanhToan('approveModal')"
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Thanh
+                        Toán</button>
+                </div>
+            </div>
+
+            <div id="cancelModal"
+                class="modal hidden fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="modal-content bg-white p-4 rounded-lg">
+                    <h2>Xác nhận hủy đơn hàng</h2>
+                    <p>Bạn có chắc chắn muốn hủy đơn hàng này?</p>
+
+                    <form method="post">
+                        <input type="hidden" name="cancelId" value="<?php echo $id ?>">
+                        <div class="flex items-center justify-center gap-5">
+                            <button type="submit" name="confirmCancel"
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hủy</button>
+                            <button type="button" onclick="closeModal('cancelModal')"
+                                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Đóng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="approveModal"
+                class="modal hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-gray-700 ">
+                <div class="modal-content bg-white p-4 flex flex-col  rounded-lg px-10">
+                    <h2 class="text-2xl border-b-2 border-yellow-500">Thông tin thanh toán</h2>
+                    <p class="mt-10">Thông tin các món ăn</p>
+                    <div class="flex justify-between px-3 text-base font-semibold mb-10 w-[500px] mt-5">
+
+                        <?php
+                        foreach ($list as $item) {
+                            echo '<p>Tên món ăn: ' . $item[0] . ' : </p>';
+                            echo ' <p>Số lượng: ' . $item[1] . '</p>';
+                            echo ' <p>Đơn giá: ' . $item[2] . '</p>';
+                        }
+                        ?>
+                    </div>
+                    <div class="flex justify-end">
+
+                        <p class="">Tổng số tiền:
+                            <?php echo $total ?> VNĐ
+                        </p>
+                    </div>
+                    <form method="post">
+                        <input type="hidden" name="approveId" value="<?php echo $id ?>">
+                        <div class="flex items-center justify-center my-3 mx-auto gap-5 w-[90%]">
+                            <button type="submit" name="confirmApprove"
+                                class="text-black w-full border-[1px] border-gray-800  font-bold py-2 px-4 rounded">Trả
+                                khi
+                                nhận hàng</button>
+                        </div>
+                    </form>
+                    <form method="post" action="vnpay.php?MaDon=<?php echo $id ?>">
+                        <div class="flex items-center justify-center my-3 mx-auto gap-5 w-[90%]">
+                            <input type="hidden" name="approveId" value="<?php echo $id ?>">
+                            <button type="submit" name="redirect"
+                                class="text-black w-full border-[1px] border-gray-800  font-bold py-2 px-4 rounded">Thanh
+                                Toán
+                                qua VNPAY</button>
+                        </div>
+                    </form>
+                    <form method="post">
+                        <div class="flex items-center justify-center my-3 mx-auto gap-5 w-[90%]">
+                            <button type="submit" name="cancelApprove" onclick="closeModal('approveModal')"
+                                class="bg-gray-500 w-full hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Đóng</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
     </div>
@@ -158,6 +243,14 @@
         window.onclick = function (event) {
             if (event.target == document.getElementById("myModal")) {
                 closeModal();
+            }
+        }
+        function openModalThanhToan(modalId) {
+            var modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+            } else {
+                console.error('No modal found with ID:', modalId);
             }
         }
     </script>

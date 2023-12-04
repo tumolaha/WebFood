@@ -12,7 +12,7 @@
     include 'dbConnection.php';
     if (isset($_GET['MaDon'])) {
         $maDon = $_GET['MaDon'];
-        $sql = "SELECT * FROM dondatmon join monan on monan.MaMon = dondatmon.MaMon WHERE dondatmon.trangthai = 0";
+        $sql = "SELECT * FROM dondatmon join monan on monan.MaMon = dondatmon.MaMon WHERE dondatmon.trangthai = 1";
         $result = mysqli_query($conn, $sql);
         // sau khi query result là một array
         $ids = "";
