@@ -15,45 +15,33 @@ if (isset($_POST['delete'])) {
         echo "Error deleting menu item: " . mysqli_error($conn);
     }
 }
+$results_per_page = 10;
+// Find out the number of results stored in database
+$sql = 'SELECT * FROM menu 
+    JOIN monan ON monan.MaMon = menu.MaMon 
+    JOIN nguyenlieu ON menu.MaNL = nguyenlieu.MaNL
+    ORDER BY ngayban DESC
+';
 
-// Check if the filter button is clicked
-if (isset($_POST['filter'])) {
-    $selectedDate = $_POST['selected_date'];
 
-    // Perform the filter operation
-    $filterSql = "SELECT * FROM menu 
-                JOIN monan ON monan.MaMon = menu.MaMon 
-                JOIN nguyenlieu ON menu.MaNL = nguyenlieu.MaNL
-                WHERE ngayban = '$selectedDate'
-                ORDER BY ngayban DESC";
-    $result = mysqli_query($conn, $filterSql);
+$result = mysqli_query($conn, $sql);
+$number_of_results = mysqli_num_rows($result);
+
+// Determine number of total pages available
+$number_of_pages = ceil($number_of_results / $results_per_page);
+
+// Determine which page number visitor is currently on
+if (!isset($_GET['page'])) {
+    $page = 1;
 } else {
-    // Retrieve all menu items
-    $sql = 'SELECT * FROM menu 
-                JOIN monan ON monan.MaMon = menu.MaMon 
-                JOIN nguyenlieu ON menu.MaNL = nguyenlieu.MaNL
-                ORDER BY ngayban DESC';
-    $result = mysqli_query($conn, $sql);
+    $page = $_GET['page'];
 }
-
 ?>
-
 <!-- content -->
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Thực đơn </h1>
 </div>
-
-<!-- Filter form -->
-<form method="post" action="QuanLyThucDon.php" class="pb-4 px-5">
-    <div class="flex items-center">
-        <label for="selected_date" class="mr-2">Lọc theo ngày:</label>
-        <input type="date" name="selected_date" id="selected_date" class="border border-gray-300 rounded-md px-2 py-1">
-        <button type="submit" name="filter" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md px-3 py-1">Lọc</button>
-    </div>
-</form>
-
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-2">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
     <div class="pb-4  flex justify-end">
         <a href="./ThemThucDon.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm
             sản phẩm</a>
@@ -95,26 +83,7 @@ if (isset($_POST['filter'])) {
             <?php
             require_once __DIR__ . '../../dbConnection.php';
             // Define how many results you want per page
-            $results_per_page = 10;
 
-            // Find out the number of results stored in database
-            $sql = 'SELECT * FROM menu 
-                JOIN monan ON monan.MaMon = menu.MaMon 
-                JOIN nguyenlieu ON menu.MaNL = nguyenlieu.MaNL
-                ORDER BY ngayban DESC
-            ';
-            $result = mysqli_query($conn, $sql);
-            $number_of_results = mysqli_num_rows($result);
-
-            // Determine number of total pages available
-            $number_of_pages = ceil($number_of_results / $results_per_page);
-
-            // Determine which page number visitor is currently on
-            if (!isset($_GET['page'])) {
-                $page = 1;
-            } else {
-                $page = $_GET['page'];
-            }
 
             if ($result->num_rows > 0) {
                 // output data of each row

@@ -12,8 +12,6 @@ $page = 1;
 $number_of_pages = ceil($number_of_results / $results_per_page);
 $this_page_first_result = ($page - 1) * $results_per_page;
 
-// $ingredientQuery = "SELECT * FROM ingredients";
-// $ingredientResult = mysqli_query($connection, $ingredientQuery);
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -27,11 +25,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: ../../page/QuanLy/DuyetPhieuDeXuatMon.php');
 }
 
+// Check if the filter form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filter'])) {
+    // Get the submitted form data
+    $filterDate = $_GET['filterDate'];
+
+    // Fetch menu data based on the filter
+    $menuQuery = "SELECT * FROM monan WHERE DATE(ngaytao) = '$filterDate' ORDER BY ngaytao DESC";
+    $menuResult = mysqli_query($conn, $menuQuery);
+    $number_of_results = mysqli_num_rows($menuResult);
+    $number_of_pages = ceil($number_of_results / $results_per_page);
+    $this_page_first_result = ($page - 1) * $results_per_page;
+}
+
 ?>
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
 </div>
 <div class="content flex-1 px-4  w-full overflow-scroll">
+    <form method="GET">
+        <div class="flex items-center mb-4">
+            <label class="mr-2">Ngày tạo:</label>
+            <input type="date" name="filterDate" class="border border-gray-300 rounded px-2 py-1">
+            <button type="submit" name="filter" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Lọc</button>
+        </div>
+    </form>
 
     <table class="table-auto w-full ">
         <thead>
@@ -41,9 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <th class="py-3 px-6 text-left whitespace-nowrap">Giá</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Hình ảnh</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Công thức</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">Nguyên Liệu</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Trạng thái</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Ngày tạo</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">Duyệt</th>
+                <th class="py-3 px-6 text-left">Duyệt</th>
                 <th class="py-3 px-6 text-left"></th>
             </tr>
         </thead>
@@ -88,6 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     echo $menuRow['CongThuc'];
                 }
+                echo "</td>";
+                echo "<td class='py-3 px-6 text-left'>";
+                echo "<a href='../../Page/QuanLy/XemNguyenLieu.php?MaMon=" . $menuRow['MaMon'] . "' class='text-blue-500 hover:text-blue-600 white whitespace-nowrap' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none;'>Xem</a>";
                 echo "</td>";
                 echo "<td class='py-3 px-6 text-left'>";
                 echo "<span class='status flex items-center justify-center flex-nowrap ";

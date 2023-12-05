@@ -18,7 +18,7 @@ $result = mysqli_query($conn, $query);
 // Render the data table
 ?>
 <div class=" px-5 py-10">
-    <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
+    <h1 class="text-2xl font-bold text-black">Lịch sử đánh giá</h1>
 </div>
 <div class="content flex-1 mt-2 ml-8">
     <form action="" method="GET" class="m-4">

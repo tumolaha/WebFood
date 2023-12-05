@@ -1,6 +1,45 @@
 <?php
 require __DIR__ . '../../header.php';
 require __DIR__ . '/SidebarQuanLy.php';
+require_once __DIR__ . '../../dbConnection.php';
+
+
+
+if (isset($_POST['delete_id'])) {
+  $id = $_POST['delete_id'];
+  $sql = "DELETE FROM nguyenlieu WHERE MaNL='$id'";
+  if ($conn->query($sql) === TRUE) {
+    echo "Record deleted successfully";
+    echo '<script> location.replace("QuanLyNguyenLieu.php"); </script>';
+  } else {
+    echo "Error deleting record: " . $conn->error;
+  }
+}
+// Define how many results you want per page
+$results_per_page = 10;
+// Find out the number of results stored in database
+$sql = 'SELECT * FROM nguyenlieu';
+$result = mysqli_query($conn, $sql);
+$number_of_results = mysqli_num_rows($result);
+
+// Determine number of total pages available
+$number_of_pages = ceil($number_of_results / $results_per_page);
+
+// Determine which page number visitor is currently on
+if (!isset($_GET['page'])) {
+  $page = 1;
+} else {
+  $page = $_GET['page'];
+}
+// Determine the sql LIMIT starting number for the results on the displaying page
+$this_page_first_result = ($page - 1) * $results_per_page;
+
+
+// Retrieve selected results from database and display them on page
+$sql = 'SELECT * FROM nguyenlieu LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
+$result = mysqli_query($conn, $sql);
+// Handle delete request
+
 ?>
 <div class="w-full">
   <!-- content -->
@@ -23,65 +62,27 @@ require __DIR__ . '/SidebarQuanLy.php';
         <th scope="col" class="px-6 py-3">
           Tên Nguyên Liệu
         </th>
-        <th scope="col" class="px-6 py-3">
-          Số lượng cần nhập
-        </th>
+
         <th scope="col" class="px-6 py-3">
           Ngày cập nhật
         </th>
         <th scope="col" class="px-6 py-3">
-          Giá
-        </th>
-        <th scope="col" class="px-6 py-3">
-          Đơn vị tính
+          Số lượng cần nhập
         </th>
         <th scope="col" class="relative px-6 py-3">
           <span class="sr-only">Edit</span>
-          </tr>
+        </th>
       </thead>
       <tbody>
-        <!-- delete -->
-
-        <!-- render table -->
         <?php
-        require_once __DIR__ . '../../dbConnection.php';
-        // Define how many results you want per page
-        $results_per_page = 10;
-
-        // Find out the number of results stored in database
-        $sql = 'SELECT * FROM nguyenlieu';
-        $result = mysqli_query($conn, $sql);
-        $number_of_results = mysqli_num_rows($result);
-
-        // Determine number of total pages available
-        $number_of_pages = ceil($number_of_results / $results_per_page);
-
-        // Determine which page number visitor is currently on
-        if (!isset($_GET['page'])) {
-          $page = 1;
-        } else {
-          $page = $_GET['page'];
-        }
-
-        // Determine the sql LIMIT starting number for the results on the displaying page
-        $this_page_first_result = ($page - 1) * $results_per_page;
-
-        // Retrieve selected results from database and display them on page
-        $sql = 'SELECT * FROM nguyenlieu LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
-        $result = mysqli_query($conn, $sql);
-
-
-
         if ($result->num_rows > 0) {
           // output data of each row
           while ($row = $result->fetch_assoc()) {
             echo '<tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-500 text-center dark:hover:bg-gray-300">';
             echo '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaNL"] . '</th>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
-            echo '<td class="px-6 py-4 text-gray-900">' . $row["SoLuong"] . '</td>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["NgayNhap"] . '</td>';
-            echo '<td class="px-6 py-4 text-gray-900">' . $row["Gia"] . '</td>';
-            echo '<td class="px-6 py-4 text-gray-900">' . $row["DonViTinh"] . '</td>';
+            echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
             echo '<td class="px-6 flex gap-2 py-4 text-gray-900 font-bold">';
             echo '<a href="./SuaNguyenLieu.php?id=' . $row["MaNL"] . '" class="font-medium text-blue-600 hover:underline">Sửa</a>';
             echo '<button type="button" class="font-medium text-red-600 hover:underline" onclick="openModal(' . $row['MaNL'] . ')">Xoá</button>';
@@ -91,24 +92,7 @@ require __DIR__ . '/SidebarQuanLy.php';
         } else {
           echo "0 results";
         }
-
-        // Handle delete request
-        if (isset($_POST['delete_id'])) {
-          $id = $_POST['delete_id'];
-          $sql = "DELETE FROM nguyenlieu WHERE MaNL='$id'";
-          if ($conn->query($sql) === TRUE) {
-            echo "Record deleted successfully";
-            echo '<script> location.replace("QuanLyNguyenLieu.php"); </script>';
-          } else {
-            echo "Error deleting record: " . $conn->error;
-          }
-        }
-
-        $conn->close();
         ?>
-
-
-
       </tbody>
     </table>
     <div class="flex flex-col items-end justify-center">
@@ -185,4 +169,7 @@ require __DIR__ . '/SidebarQuanLy.php';
   </script>
 </div>
 <!-- end content -->
-<?php require __DIR__ . '../../footer.php'; ?>
+<?php require __DIR__ . '../../footer.php';
+$conn->close();
+
+?>

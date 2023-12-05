@@ -8,7 +8,7 @@ if (isset($_POST['addNewThucDon'])) {
     // Get the form data
     $maMenu = $_POST['MaMenu'];
     $maMon = $_POST['MaMon'];
-    $maNguyenLieu = $_POST['MaNL'];
+    // $maNguyenLieu = $_POST['MaNL'];
     $ngayBan = $_POST['ngayban'];
 
     // Check if the MaMenu already exists in the database
@@ -21,7 +21,7 @@ if (isset($_POST['addNewThucDon'])) {
         // MaMenu already exists, display an error message or redirect to an error page
         echo "ma thực đơn tồn tại!";
     } else {
-        $sql = "INSERT INTO menu (MaMenu, MaMon, MaNL, ngayban) VALUES ('$maMenu', '$maMon', '$maNguyenLieu', '$ngayBan')";
+        $sql = "INSERT INTO menu (MaMenu, MaMon, ngayban) VALUES ('$maMenu', '$maMon', '$ngayBan')";
         // Execute the SQL query
         mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
@@ -45,12 +45,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 // Get the list of "ma_nguyen_lieu" values from the table
-$sql = "SELECT MaNL, TenNL FROM nguyenlieu";
-$result = mysqli_query($conn, $sql);
-$maNguyenLieuList = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $maNguyenLieuList[$row['MaNL']] = $row['TenNL'];
-}
 
 ?>
 
@@ -72,14 +66,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <?php } ?>
             </select>
         </div>
-        <div class="mb-4">
-            <label for="TenNV" class="block text-sm font-medium text-gray-700">Mã Nguyên Liệu</label>
-            <select name="MaNL" class="mt-1 py-2.5 px-2 border border-blue-500 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
-                <?php foreach ($maNguyenLieuList as $maNguyenLieuKey => $maNguyenLieuValue) { ?>
-                    <option value="<?php echo $maNguyenLieuKey; ?>"><?php echo $maNguyenLieuValue; ?></option>
-                <?php } ?>
-            </select>
-        </div>
+
         <div class="mb-4">
             <label for="SDT" class="block text-sm font-medium text-gray-700">Ngày bán</label>
             <input type="date" name="ngayban" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>

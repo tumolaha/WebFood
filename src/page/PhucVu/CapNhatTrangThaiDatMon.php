@@ -1,31 +1,29 @@
 <?php
 require_once __DIR__ . "../../Header.php";
 require_once __DIR__ . "/SidebarPhucVu.php";
-
-// Get the menu data
-
 require_once __DIR__ . '../../dbConnection.php';
+
 // Define how many results you want per page
 $results_per_page = 10;
 
-// Filter by employee ID
-$employeeId = $_GET['employeeId'] ?? '';
+// Get the filter values
+$filterDate = $_GET['date'] ?? '';
+$filterMaNV = $_GET['maNV'] ?? '';
 
-// Filter by date
-$date = $_GET['date'] ?? '';
+// Build the SQL query with filters
+$sql = "SELECT * FROM dondatmon WHERE 1=1";
+if (!empty($filterDate)) {
+    $sql .= " AND NgayDat = '$filterDate'";
+}
+if (!empty($filterMaNV)) {
+    $sql .= " AND MaNV = '$filterMaNV'";
+}
 
-// Find out the number of results stored in database
-$sql = "SELECT * FROM dondatmon";
-if (!empty($employeeId)) {
-    $sql .= " WHERE MaNV = '$employeeId'";
-}
-if (!empty($date)) {
-    $sql .= " AND NgayDat = '$date'";
-}
+// Find out the number of results stored in the database
 $result = mysqli_query($conn, $sql);
 $number_of_results = mysqli_num_rows($result);
 
-// Determine number of total pages available
+// Determine the number of total pages available
 $number_of_pages = ceil($number_of_results / $results_per_page);
 
 // Function to update the status of an order
@@ -42,18 +40,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: ./CapNhatTrangThaiDatMon.php");
 }
 
-
 ?>
-<div class=" px-5 py-10">
+<div class="px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
 </div>
-<div class="content flex-1 mt-2 ml-8">
-    <form method="GET" action="CapNhatTrangThaiDatMon.php" class="mb-4">
-        <label for="employeeId" class="mr-2">Mã nhân viên:</label>
-        <input type="text" name="employeeId" id="employeeId" value="<?php echo $employeeId; ?>">
-        <label for="date" class="mr-2 ml-4">Ngày đặt:</label>
-        <input type="date" name="date" id="date" value="<?php echo $date; ?>">
-        <button type="submit">Lọc</button>
+<div class="content flex-1 p-4">
+    <form method="GET" action="CapNhatTrangThaiDatMon.php" class="mb-4 flex gap-5 items-center mb-10">
+        <div class="flex items-center">
+            <label for="date" class="mr-2">Ngày:</label>
+            <input type="date" name="date" id="date" value="<?php echo $filterDate; ?>" class="border border-gray-300 rounded px-2 py-1">
+        </div>
+        <div class="flex items-center ">
+            <label for="maNV" class="mr-2">Mã NV:</label>
+            <input type="text" name="maNV" id="maNV" value="<?php echo $filterMaNV; ?>" class="border border-gray-300 rounded px-2 py-1">
+        </div>
+        <button type="submit" class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Lọc</button>
     </form>
 
     <table class="table-auto w-full">
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <th class="py-3 px-6 text-left whitespace-nowrap">Tổng Tiền</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Trạng Thái</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Đánh Giá</th>
-                <th class="py-3 px-6 text-left"></th>
+                <th class="py-3 px-6 text-left">Thao tác</th>
             </tr>
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
@@ -93,15 +94,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . "</td>";
 
-                // Add the approve button
-                echo "<td class='py-3 px-6 text-left'>";
-                echo "<form method='POST'  action='CapNhatTrangThaiDatMon.php' class='flex flex-nowrap'>";
-                echo "<input type='hidden' name='maDon' value='" . $menuRow['MaDon'] . "'>";
-                echo "<select name='trangThai'>";
-                echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
-                echo "<option value='2' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
-                echo "</select>";
-                echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
+                // Add check to update order only if it is not canceled
+                if ($menuRow['TrangThai'] != 1) {
+                    echo "<td class='py-3 px-6 text-left'>";
+                    echo "<form method='POST'  action='CapNhatTrangThaiDatMon.php' class='flex flex-nowrap'>";
+                    echo "<input type='hidden' name='maDon' value='" . $menuRow['MaDon'] . "'>";
+                    echo "<select name='trangThai'>";
+                    echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
+                    echo "<option value='2' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
+                    echo "</select>";
+                    echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
+                    echo "</form>";
+                    echo "</td>";
+                } else {
+                    echo "<td class='py-3 px-6 text-left'>Đơn hàng đã bị huỷ</td>";
+                }
+
+                echo "</tr>";
                 echo "</form>";
                 echo "</td>";
 
