@@ -8,6 +8,6 @@
     "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json": "file:///e%3A/WorkSpace/WorkSchool/TLCN/EduConnect/backend/deployment/frontend-service.yaml"
   },
   "[php]": {
-    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    "editor.defaultFormatter": "DEVSENSE.phptools-vscode"
   }
 }

@@ -9,6 +9,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="./Sidebar/css/style.css">
 
 </head>
 
@@ -31,35 +32,35 @@
             // lấy vnp_OrderInfo từ url
             include 'dbConnection.php';
             $idList = array();
-$vnp_OrderInfo = $_GET['vnp_OrderInfo'];
-$parts = explode("/", $vnp_OrderInfo);
-$tokenPosition = array_search('token', $parts);
+            $vnp_OrderInfo = $_GET['vnp_OrderInfo'];
+            $parts = explode("/", $vnp_OrderInfo);
+            $tokenPosition = array_search('token', $parts);
 
-if ($tokenPosition !== false) {
-    $idList = array_slice($parts, 0, $tokenPosition);
-} else {
-    $idList = $parts;
-}
+            if ($tokenPosition !== false) {
+                $idList = array_slice($parts, 0, $tokenPosition);
+            } else {
+                $idList = $parts;
+            }
 
-// Ensure that $idList contains only numbers
-$idList = array_filter($idList, 'is_numeric');
+            // Ensure that $idList contains only numbers
+            $idList = array_filter($idList, 'is_numeric');
 
-// Convert the array of IDs to a string for the SQL query
-$idListString = implode(',', $idList);
+            // Convert the array of IDs to a string for the SQL query
+            $idListString = implode(',', $idList);
 
-if (!empty($idList)) {
-    $query = "UPDATE dondatmon SET trangthai = 1 WHERE MaDon IN ($idListString)";
-    $result = mysqli_query($conn, $query);
-    if ($result) {
-        echo "<script>alert('Đặt món thành công')</script>";
-    } else {
-        echo "<script>alert('Đặt món thất bại')</script>";
-    }
-}
+            if (!empty($idList)) {
+                $query = "UPDATE dondatmon SET trangthai = 3 WHERE MaDon IN ($idListString)";
+                $result = mysqli_query($conn, $query);
+                if ($result) {
+                    echo "<script>alert('Đặt món thành công')</script>";
+                } else {
+                    echo "<script>alert('Đặt món thất bại')</script>";
+                }
+            }
 
 
             ?>
-            <section class="content w-full px-10 py-5">
+            <section class="content w-full px-10 ml-20 py-5">
 
                 <div class="bg-gray-100 h-screen">
                     <div class="bg-white p-6  md:mx-auto">
@@ -89,5 +90,6 @@ if (!empty($idList)) {
 
     </html>
 </body>
+<script src="./Sidebar/js/script.js"></script>
 
 </html>
