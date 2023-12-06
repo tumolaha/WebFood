@@ -1,6 +1,6 @@
-<?php
+<?php 
 ob_start();
-session_start();
+session_start(); 
 ?>
 
 <!DOCTYPE html>
@@ -12,8 +12,7 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wed Food</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
     .animated {
@@ -84,13 +83,9 @@ session_start();
           </div>
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
-              <a href="/webfood/src/page/Login.php">
-
-                <button
-                  class="cursor-pointer group relative flex gap-1.5 px-8 py-2 bg-blue-300 bg-opacity-50 text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 transition font-semibold shadow-md">
-                  login
-                </button>
-              </a>
+              <button class="cursor-pointer group relative flex gap-1.5 px-8 py-2 bg-blue-300 bg-opacity-50 text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 transition font-semibold shadow-md">
+                login
+              </button>
             </div>
           </div>
         </div>
