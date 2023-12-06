@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) == 1) {
         $_SESSION['user'] = $user;
-        header('Location: EmployeeManager.php');
+        header('Location: Home.php');
     } else {
         echo "Invalid login credentials.";
     }

@@ -26,7 +26,7 @@ if (isset($_POST['addNewThucDon'])) {
         mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
         // Redirect to a success page or display a success message
-        header("Location: ../../page/QuanLy/QuanLyThucDon.php");
+        header("Location: ../../page/QuanLyBep/QuanLyThucDon.php");
         exit;
     }
 

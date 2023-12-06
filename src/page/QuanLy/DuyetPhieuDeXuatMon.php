@@ -31,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
 </div>
-<div class="content flex-1 mt-2 ml-8">
+<div class="content flex-1 px-4  w-full overflow-scroll">
 
-    <table class="table-auto w-full">
+    <table class="table-auto w-full ">
         <thead>
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal w-full">
                 <th class="py-3 px-6 text-left whitespace-nowrap">Mã Món</th>
@@ -51,12 +51,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
             // Loop through menu data
             while ($menuRow = mysqli_fetch_assoc($menuResult)) {
+
+                $imagePath = $menuRow['HinhMinhHoa'];
+                if ($imagePath === null) {
+                    $imagePath = 'src\uploads\default-food-image.jpg';
+                }
+                $srcPosition = strpos($imagePath, 'src');
+                if ($srcPosition !== false) {
+                    $imagePath = substr($imagePath, $srcPosition);
+                }
+
+                $url = 'http://localhost/webfood/' . $imagePath;
+                $url = str_replace('\\', '/', $url);
+
+
                 echo "<tr>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaMon'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['TenMon'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $menuRow['DonGia'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $menuRow['HinhMinhHoa'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $menuRow['CongThuc'] . "</td>";
+                echo "<td class='py-3 px-6 text-left'>";
+                if ($menuRow['DonGia'] === null) {
+                    echo "Chưa cập nhật";
+                } else {
+                    echo $menuRow['DonGia'];
+                }
+                echo "</td>";
+                echo "<td class='py-3 px-6 text-left'>";
+                if ($url === null) {
+                    echo "Chưa cập nhật";
+                } else {
+                    echo '<img class="p-8 rounded-t-lg" src="' . $url . '" alt="Image" width="200" height="200" />';
+                }
+                echo "</td>";
+                echo "<td class='py-3 px-6 text-left'>";
+                if ($menuRow['CongThuc'] === null) {
+                    echo "Chưa cập nhật";
+                } else {
+                    echo $menuRow['CongThuc'];
+                }
+                echo "</td>";
                 echo "<td class='py-3 px-6 text-left'>";
                 echo "<span class='status flex items-center justify-center flex-nowrap ";
                 if ($menuRow['trangthai'] == 0) {
@@ -82,10 +114,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<option value='0' " . ($menuRow['trangthai'] == 0 ? "selected" : "") . ">Chưa duyệt</option>";
                 echo "<option value='1' " . ($menuRow['trangthai'] == 1 ? "selected" : "") . ">Đã duyệt</option>";
                 echo "</select>";
-                echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
-                echo "</form>";
-                echo "</td>";
+                echo "<button class='ml-4' type='submit' style='background-color: blue; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
 
+                echo "</form>";
+
+                echo "</td>";
+                //    cập nhật thông in món ăn
+                echo "<td class='py-3 px-6 text-left'>";
+                echo "<a href='../../Page/QuanLy/CapNhatThongTinMonAn.php?MaMon=" . $menuRow['MaMon'] . "' class='text-blue-500 hover:text-blue-600 white whitespace-nowrap' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none;'>Cập nhật</a>";
+                echo "</td>";
                 echo "</tr>";
             }
             ?>

@@ -1,6 +1,9 @@
 <?php
 require __DIR__ . '../../header.php';
 require __DIR__ . '/SidebarQuanLy.php';
+require __DIR__ . '../../dbConnection.php';
+
+
 ?>
 
 <div class="mb-10">
@@ -93,7 +96,7 @@ require __DIR__ . '/SidebarQuanLy.php';
                       ' . $row['SDT'] . '
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <form action="EditEmployee.php?id=' . $row['MaNV'] . '" method="post" >
+                      <form action="SuaNhanVien.php?id=' . $row['MaNV'] . '" method="post" >
                         <input type="hidden" name="edit_id" value="' . $row['MaNV'] . '">
                         <button type="submit" name="edit" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                       </form>

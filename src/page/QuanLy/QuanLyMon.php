@@ -75,6 +75,9 @@ if (!isset($_GET['page'])) {
                 <th scope="col" class="px-6 py-3">
 
                 </th>
+                <th scope="col" class="px-6 py-3">
+
+                </th>
 
             </tr>
         </thead>
@@ -83,16 +86,28 @@ if (!isset($_GET['page'])) {
             if ($result->num_rows > 0) {
                 // output data of each row
                 while ($row = $result->fetch_assoc()) {
+                    $imagePath = $row['HinhMinhHoa'];
+
+                    $srcPosition = strpos($imagePath, 'src');
+                    if ($srcPosition !== false) {
+                        $imagePath = substr($imagePath, $srcPosition);
+                    }
+
+                    $url = 'http://localhost/webfood/' . $imagePath;
+                    $url = str_replace('\\', '/', $url);
+
                     echo '<tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-500 text-center dark:hover:bg-gray-300">';
                     echo '<td scope="row"  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaMon"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["TenMon"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["DonGia"] . '</td>';
-                    echo '<td class="px-6 py-4 text-gray-900">' . $row["HinhMinhHoa"] . '</td>';
+                    echo '<td class="px-6 py-4 text-gray-900"> <img class="p-8 rounded-t-lg" src="' . $url . '" alt="Image" width="200" height="200" />';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["CongThuc"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["trangthai"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["ngaytao"] . '</td>';
-                    echo '<td class="px-6 flex gap-2 py-4 text-gray-900 font-bold">';
+                    echo '<td class="px-6 py-4">';
                     echo '<a href="./SuaMonAn.php?id=' . $row["MaMon"] . '" class="font-medium text-blue-600 hover:underline">Sửa</a>';
+                    echo '</td>';
+                    echo '<td class="px-6 py-4">';
                     echo '<button type="button" class="font-medium text-red-600 hover:underline" onclick="openModal(' . $row['MaMon'] . ')">Xoá</button>';
                     echo '</td>';
                     echo '</tr>';

@@ -24,7 +24,7 @@ require __DIR__ . '/SidebarQuanLy.php';
           Tên Nguyên Liệu
         </th>
         <th scope="col" class="px-6 py-3">
-          Số lượng tồn trong kho
+          Số lượng cần nhập
         </th>
         <th scope="col" class="px-6 py-3">
           Ngày cập nhật

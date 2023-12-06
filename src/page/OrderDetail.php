@@ -9,27 +9,37 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="./Sidebar/css/style.css">
 </head>
 
 <body>
     <?php include 'header.php'; ?>
     <div class="flex w-screen bg-blue-100/30">
 
-        <?php include 'EmployeeSidebar.php'; ?>
-        <section class="content w-full px-10 py-5 flex justify-center items-center">
+        <?php include_once("./Sidebar/html/index.php"); ?>
+        <section class="content w-full px-10 ml-20 py-5 flex justify-center items-center">
             <?php
             include 'dbConnection.php';
             $id = $_GET['id'];
             $sql = "SELECT * FROM dondatmon join monan on monan.MaMon = dondatmon.MaMon WHERE MaDon = $id";
             $result = mysqli_query($conn, $sql);
             $row = mysqli_fetch_assoc($result);
+            $imagePath = $row['HinhMinhHoa'];
+
+            $srcPosition = strpos($imagePath, 'src');
+            if ($srcPosition !== false) {
+                $imagePath = substr($imagePath, $srcPosition);
+            }
+
+            $url = 'http://localhost/webfood/' . $imagePath;
+            $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
             ?>
             <div
                 class="relative flex flex-col text-gray-700 w-[700px]  items-center bg-white shadow-md w-96 rounded-xl bg-clip-border">
                 <div
                     class="relative h-80 mx-4 -mt-6 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
-                    <img src="<?php echo $row['HinhMinhHoa'] ?>" class="object-cover w-full h-full"
-                        alt="img-blur-shadow" layout="fill" />
+                    <img src="<?php echo $url ?>" class="object-cover w-full h-full" alt="img-blur-shadow"
+                        layout="fill" />
                 </div>
                 <div class="p-6">
                     <h5
@@ -63,5 +73,6 @@
     </div>
 
 </body>
+<script src="./Sidebar/js/script.js"></script>
 
 </html>

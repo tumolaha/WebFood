@@ -1,10 +1,11 @@
 <?php
 require_once __DIR__ . '../../header.php';
 require_once __DIR__ . '/SiderbarQuanLyBep.php';
+require_once __DIR__ . '../../dbConnection.php';
 
 // Check if the delete button is clicked
-if (isset($_GET['delete'])) {
-    $menuId = $_GET['delete'];
+if (isset($_POST['delete'])) {
+    $menuId = $_POST['delete'];
 
     // Perform the delete operation
     $deleteSql = "DELETE FROM menu WHERE MaMenu = $menuId";
@@ -15,11 +16,43 @@ if (isset($_GET['delete'])) {
     }
 }
 
+// Check if the filter button is clicked
+if (isset($_POST['filter'])) {
+    $selectedDate = $_POST['selected_date'];
+
+    // Perform the filter operation
+    $filterSql = "SELECT * FROM menu 
+                JOIN monan ON monan.MaMon = menu.MaMon 
+                JOIN nguyenlieu ON menu.MaNL = nguyenlieu.MaNL
+                WHERE ngayban = '$selectedDate'
+                ORDER BY ngayban DESC";
+    $result = mysqli_query($conn, $filterSql);
+} else {
+    // Retrieve all menu items
+    $sql = 'SELECT * FROM menu 
+                JOIN monan ON monan.MaMon = menu.MaMon 
+                JOIN nguyenlieu ON menu.MaNL = nguyenlieu.MaNL
+                ORDER BY ngayban DESC';
+    $result = mysqli_query($conn, $sql);
+}
+
 ?>
+
 <!-- content -->
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Thực đơn </h1>
 </div>
+
+<!-- Filter form -->
+<form method="post" action="QuanLyThucDon.php" class="pb-4 px-5">
+    <div class="flex items-center">
+        <label for="selected_date" class="mr-2">Lọc theo ngày:</label>
+        <input type="date" name="selected_date" id="selected_date" class="border border-gray-300 rounded-md px-2 py-1">
+        <button type="submit" name="filter" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md px-3 py-1">Lọc</button>
+    </div>
+</form>
+
+
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-2">
     <div class="pb-4  flex justify-end">
         <a href="./ThemThucDon.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm
@@ -148,15 +181,15 @@ if (isset($_GET['delete'])) {
                         </h3>
                         <div class="mt-2">
                             <p class="text-sm text-gray-500">
-                                Bạn có chắc chắn muốn xoá nguyên liệu này không?
+                                Bạn có chắc chắn muốn xoá món ăn trong thực đơn này không?
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <form method="post" action="QuanLyNguyenLieu.php" id="delete-form">
-                    <input type="hidden" name="delete_id" id="delete-id">
+                <form method="post" action="QuanLyThucDon.php" id="delete-form">
+                    <input type="hidden" name="delete" id="delete-id">
                     <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                         Xoá
                     </button>

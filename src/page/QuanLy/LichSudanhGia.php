@@ -24,6 +24,8 @@ $result = mysqli_query($conn, $query);
     <form action="" method="GET" class="m-4">
         <label for="date" class="mr-2">Chọn ngày:</label>
         <input type="date" id="date" name="date" value="<?php echo $selectedDate; ?>" class="px-2 py-1 border border-gray-300 rounded-md">
+        <label for="maNV" class="mr-2 ml-4">Nhập mã NV:</label>
+        <input type="text" id="maNV" name="maNV" class="px-2 py-1 border border-gray-300 rounded-md">
         <button type="submit" class="px-4 py-2 ml-2 bg-blue-500 text-white rounded-md">Xem</button>
     </form>
     <table class="table-auto w-full">

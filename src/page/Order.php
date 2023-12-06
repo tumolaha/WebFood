@@ -7,21 +7,35 @@ if (isset($_GET['id'])) {
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $imagePath = $row['HinhMinhHoa'];
-                            $url = str_replace('C:\\xampp\\htdocs\\WebFood', 'http://localhost/webfood', $imagePath);
-                            $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
+
+    $srcPosition = strpos($imagePath, 'src');
+    if ($srcPosition !== false) {
+        $imagePath = substr($imagePath, $srcPosition);
+    }
+
+    $url = 'http://localhost/webfood/' . $imagePath;
+    $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
 }
 
 if (isset($_POST['submit'])) {
     $date = date('Y-m-d');
     $amount = $_POST['input'];
-    $query = "INSERT INTO `dondatmon`( `MaMon`, `SoLuong`, `TongTien`,`NgayDat`,`TrangThai`,`MaNV`) VALUES ( $id, $amount, $amount * $row[DonGia],'$date',0,1)";
+    $manv = $_POST['manv'];
+    $query = "INSERT INTO `dondatmon`( `MaMon`, `soluong`, `TongTien`,`NgayDat`,`TrangThai`,`MaNV`) VALUES ( $id, $amount, $amount * $row[DonGia],'$date',0,$manv)";
     $result = mysqli_query($conn, $query);
-    
+
     if ($result) {
         echo "<script>alert('Đặt món thành công')</script>";
     } else {
         echo "<script>alert('Đặt món thất bại')</script>";
     }
+
+}
+$getNhanVienSql = "SELECT MaNV, TenNV FROM nhanvien";
+$nhanVienResult = mysqli_query($conn, $getNhanVienSql);
+$nhanVienList = [];
+while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
+    $nhanVienList[$row1['MaNV']] = $row1['TenNV'];
 }
 ?>
 
@@ -37,15 +51,16 @@ if (isset($_POST['submit'])) {
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="./Sidebar/css/style.css">
 </head>
 
 <body>
     <?php include_once("header.php"); ?>
     <div class="flex w-screen bg-blue-100/30">
-        <?php include_once("EmployeeSidebar.php"); ?>
-        <section class="content w-full px-10 py-5">
+        <?php include_once("./Sidebar/html/index.php"); ?>
+        <section class="content w-full ml-20 px-10 py-5">
             <form method="post">
-            <div class="my-10 flex">
+                <div class="my-10 flex">
                     <img class="w-[350px] h-[300px] rounded-lg" src="<?php echo $url; ?>" alt="">
                     <div class="m-auto ">
                         <p class="text-3xl font-bold">
@@ -64,11 +79,23 @@ if (isset($_POST['submit'])) {
                             </p>
                         </div>
                     </div>
-            </div>
-            <div class="flex justify-end">
-                <button type="submit" name="submit" class="w-[100px] rounded-2xl h-[40px] mr-32  bg-yellow-500">Đặt
-                    món</button>
-            </div>
+                </div>
+                <div class="mb-5">
+                    <label for="manv" class="block text-sm font-medium text-gray-700"> Nhân viên đật món</label>
+                    <select name="manv"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        required>
+                        <?php foreach ($nhanVienList as $maNV => $tenNV) { ?>
+                            <option value="<?php echo $maNV; ?>">
+                                <?php echo $tenNV; ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" name="submit" class="w-[100px] rounded-2xl h-[40px] mr-32  bg-yellow-500">Đặt
+                        món</button>
+                </div>
             </form>
         </section>
     </div>
@@ -98,5 +125,6 @@ if (isset($_POST['submit'])) {
         document.getElementById('total').innerText = total + '$';
     }
 </script>
+<script src="./Sidebar/js/script.js"></script>
 
 </html>

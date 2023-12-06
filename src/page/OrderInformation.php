@@ -9,18 +9,15 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="./Sidebar/css/style.css">
 </head>
 
 <body>
     <!-- header -->
-    <?php
-    ob_start();
-
-    include 'header.php'; ?>
     <div class="flex w-screen bg-blue-100/30">
         <!-- sidebar -->
-        <?php include 'EmployeeSidebar.php'; ?>
-        <section class="content w-full px-10 py-5">
+        <?php include_once("./Sidebar/html/index.php"); ?>
+        <section class="content w-full px-10 ml-20 py-5">
             <h1 class="text-2xl font-bold">Xem thông tin đơn đặt món</h1>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
@@ -73,7 +70,13 @@
                         $total = 0;
                         while ($row = mysqli_fetch_assoc($result)) {
                             $imagePath = $row['HinhMinhHoa'];
-                            $url = str_replace('C:\\xampp\\htdocs\\WebFood', 'http://localhost/webfood', $imagePath);
+
+                            $srcPosition = strpos($imagePath, 'src');
+                            if ($srcPosition !== false) {
+                                $imagePath = substr($imagePath, $srcPosition);
+                            }
+
+                            $url = 'http://localhost/webfood/' . $imagePath;
                             $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
                             $id = $row['MaMon'];
                             $sql1 = "SELECT * FROM monan WHERE MaMon = $id";
@@ -98,9 +101,8 @@
                             <td class="px-6 py-4">
                                 ' . $row['NgayDat'] . '
                             </td>
-                            <td class="px-6 py-4">
-                                                <button onclick="openModal(\'confirmModal' . $row['MaMon'] . '\')">Duyệt</button>
-                                                <button onclick="openModal(\'cancelModal' . $row['MaMon'] . '\')">Hủy</button>
+                            <td onclick="openModal(\'confirmModal' . $row['MaMon'] . '\')" class="px-6 py-4 bg-red-500 w-[100px] text-center rounded-lg text-white cursor-pointer font-bold">
+                                                <button >Hủy</button>
                                             </td>
                                             
                             
@@ -116,8 +118,8 @@
                                             <form method="post">
                                             <div class="flex justify-start gap-4">
                                             <input type="hidden" name="approveId" value="' . $row['MaMon'] . '">
-                                                <input type="submit" name="confirmApprove" class="w-20 h-9 bg-green-500 text-white rounded-lg text-bold" value="Xác nhận" class="btn btn-primary">
-                                                <input type="submit" name="" class="w-20 h-9 bg-red-500 text-white rounded-lg text-bold" value="Hủy" class="btn btn-primary">
+                                                <input type="submit" name="confirmApprove" class="w-20 h-9 bg-green-500 text-white rounded-lg text-bold cursor-pointer" value="Xác nhận" class="btn btn-primary">
+                                                <input type="submit" name="" class="w-20 h-9 bg-red-500 text-white rounded-lg text-bold  cursor-pointer" value="Hủy" class="btn btn-primary">
                                                 </div>
                                             </form>
                                         </div>
@@ -163,5 +165,6 @@
     </script>
 
 </body>
+<script src="./Sidebar/js/script.js"></script>
 
 </html>

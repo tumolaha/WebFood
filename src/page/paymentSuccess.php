@@ -9,6 +9,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="./Sidebar/css/style.css">
 
 </head>
 
@@ -59,7 +60,7 @@
 
 
             ?>
-            <section class="content w-full px-10 py-5">
+            <section class="content w-full px-10 ml-20 py-5">
 
                 <div class="bg-gray-100 h-screen">
                     <div class="bg-white p-6  md:mx-auto">
@@ -89,5 +90,6 @@
 
     </html>
 </body>
+<script src="./Sidebar/js/script.js"></script>
 
 </html>
