@@ -38,6 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filter'])) {
     $this_page_first_result = ($page - 1) * $results_per_page;
 }
 
+
+
+?>
+
+
+
+
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
 ?>
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
@@ -63,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filter'])) {
                 <th class="py-3 px-6 text-left whitespace-nowrap">Trạng thái</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Ngày tạo</th>
                 <th class="py-3 px-6 text-left">Duyệt</th>
-                <th class="py-3 px-6 text-left"></th>
+                <th class="py-3 px-6 text-left">Cập Nhật Thông tin</th>
             </tr>
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
@@ -109,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filter'])) {
                 }
                 echo "</td>";
                 echo "<td class='py-3 px-6 text-left'>";
-                echo "<a href='../../Page/QuanLy/XemNguyenLieu.php?MaMon=" . $menuRow['MaMon'] . "' class='text-blue-500 hover:text-blue-600 white whitespace-nowrap' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none;'>Xem</a>";
+                echo "<a href='../../page/QuanLy/XemNguyenLieu.php?MaMon=" . $menuRow['MaMon'] . "' class='text-blue-500 hover:text-blue-600 white whitespace-nowrap' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none;'>Xem</a>";
                 echo "</td>";
                 echo "<td class='py-3 px-6 text-left'>";
                 echo "<span class='status flex items-center justify-center flex-nowrap ";
@@ -130,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filter'])) {
 
                 // Add the approve button
                 echo "<td class='py-3 px-6 text-left'>";
-                echo "<form method='POST'  action='../../Page/QuanLy/DuyetPhieuDeXuatMon.php' class='flex flex-nowrap'>";
+                echo "<form method='POST'  action='../../page/QuanLy/DuyetPhieuDeXuatMon.php' class='flex flex-nowrap'>";
                 echo "<input type='hidden' name='maMon' value='" . $menuRow['MaMon'] . "'>";
                 echo "<select name='trangThai'>";
                 echo "<option value='0' " . ($menuRow['trangthai'] == 0 ? "selected" : "") . ">Chưa duyệt</option>";
@@ -143,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filter'])) {
                 echo "</td>";
                 //    cập nhật thông in món ăn
                 echo "<td class='py-3 px-6 text-left'>";
-                echo "<a href='../../Page/QuanLy/CapNhatThongTinMonAn.php?MaMon=" . $menuRow['MaMon'] . "' class='text-blue-500 hover:text-blue-600 white whitespace-nowrap' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none;'>Cập nhật</a>";
+                echo "<a href='../../page/QuanLy/CapNhatThongTinMonAn.php?MaMon=" . $menuRow['MaMon'] . "' class='text-blue-500 hover:text-blue-600 white whitespace-nowrap' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none;'>Cập nhật</a>";
                 echo "</td>";
                 echo "</tr>";
             }

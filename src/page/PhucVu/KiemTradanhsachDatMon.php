@@ -17,8 +17,11 @@ $number_of_results = mysqli_num_rows($result);
 $number_of_pages = ceil($number_of_results / $results_per_page);
 
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class=" px-5 py-10">
-    <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
+    <h1 class="text-2xl font-bold text-black">Danh sách đặt món</h1>
 </div>
 <div class="content flex-1 mt-2 ml-8">
 
@@ -53,10 +56,12 @@ $number_of_pages = ceil($number_of_results / $results_per_page);
 
                 if ($menuRow['TrangThai'] == 0) {
                     echo "<span class='bg-yellow-500 text-white py-1 px-2 rounded'>Đã đặt</span>";
-                } elseif ($menuRow['TrangThai'] == 2) {
-                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
                 } elseif ($menuRow['TrangThai'] == 1) {
+                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
+                } elseif ($menuRow['TrangThai'] == 2) {
                     echo "<span class='bg-red-500 text-white py-1 px-2 rounded'>Đã hủy</span>";
+                } elseif ($menuRow['TrangThai'] == 3) {
+                    echo "<span class='bg-blue-500 text-white py-1 px-2 rounded'>Đã thanh toán</span>";
                 }
 
                 echo "</td>";

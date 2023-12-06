@@ -18,8 +18,7 @@ if (isset($_POST['delete'])) {
 $results_per_page = 10;
 // Find out the number of results stored in database
 $sql = 'SELECT * FROM menu 
-    JOIN monan ON monan.MaMon = menu.MaMon 
-    JOIN nguyenlieu ON menu.MaNL = nguyenlieu.MaNL
+    LEFT JOIN monan ON monan.MaMon = menu.MaMon 
     ORDER BY ngayban DESC
 ';
 
@@ -38,6 +37,9 @@ if (!isset($_GET['page'])) {
 }
 ?>
 <!-- content -->
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Thực đơn </h1>
 </div>
@@ -57,9 +59,6 @@ if (!isset($_GET['page'])) {
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Tên Món
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Tên Nguyên Liệu
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Công thức
@@ -92,7 +91,6 @@ if (!isset($_GET['page'])) {
                     echo '<td scope="row"  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaMenu"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["MaMon"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["TenMon"] . '</td>';
-                    echo '<th class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</th>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["CongThuc"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["DonGia"] . '</td>';
                     echo '<td class="px-6 py-4 text-gray-900">' . $row["ngayban"] . '</td>';

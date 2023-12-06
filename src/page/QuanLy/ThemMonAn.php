@@ -6,10 +6,8 @@ require_once __DIR__ . '../../dbConnection.php';
 // Check if the form is submitted
 if (isset($_POST['addNewMonAn'])) {
     // Get the form data
-    $maMon = $_POST['MaMon'];
     $tenMon = $_POST['TenMon'];
     $donGia = $_POST['DonGia'];
-    $hinhMinhHoa = $_POST['HinhMinhHoa'];
     $congThuc = $_POST['CongThuc'];
     $trangThai = $_POST['TrangThai'];
     $ngayTao = $_POST['NgayTao'];
@@ -24,12 +22,25 @@ if (isset($_POST['addNewMonAn'])) {
         // MaMon already exists, display an error message or redirect to an error page
         echo "Mã món ăn đã tồn tại!";
     } else {
-        $sql = "INSERT INTO monan (MaMon, TenMon, DonGia, HinhMinhHoa, CongThuc, TrangThai, NgayTao) VALUES ('$maMon', '$tenMon', '$donGia', '$hinhMinhHoa', '$congThuc', '$trangThai', '$ngayTao')";
+        $uploadPath = '';
+        if (isset($_FILES['file_input'])) {
+            $file = $_FILES['file_input'];
+            $fileName = $file['name'];
+            $fileTmpName = $file['tmp_name'];
+            $fileError = $file['error'];
+
+            if ($fileError === 0) {
+                $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/webfood/src/uploads/' . $fileName;
+                move_uploaded_file($fileTmpName, $uploadPath);
+                $uploadPath = addslashes($uploadPath);
+            }
+        }
+        $sql = "INSERT INTO monan (TenMon, DonGia, HinhMinhHoa, CongThuc, TrangThai, NgayTao) VALUES ( '$tenMon', '$donGia', '$uploadPath', '$congThuc', '$trangThai', '$ngayTao')";
         // Execute the SQL query
         mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
         // Redirect to a success page or display a success message
-        header("Location: ../../page/QuanLy/QuanLyMonAn.php");
+        header("Location: ../../page/QuanLy/QuanLyMon.php");
         exit;
     }
 }
@@ -37,15 +48,14 @@ if (isset($_POST['addNewMonAn'])) {
 ?>
 
 <div class="px-5 py-10">
+    <?php
+    require_once __DIR__ . "../../breadcrumb.php";
+    ?>
     <div class="py-10">
         <h1 class="text-2xl font-bold text-black">Thêm Món Ăn</h1>
     </div>
 
-    <form action="ThemMonAn.php" method="POST">
-        <div class="mb-4">
-            <label for="MaMon" class="block text-sm font-medium text-gray-700">Mã Món</label>
-            <input type="text" name="MaMon" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-        </div>
+    <form action="ThemMonAn.php" method="POST" enctype="multipart/form-data">
 
         <div class="mb-4">
             <label for="TenMon" class="block text-sm font-medium text-gray-700">Tên Món</label>
@@ -59,7 +69,7 @@ if (isset($_POST['addNewMonAn'])) {
 
         <div class="mb-4">
             <label for="HinhMinhHoa" class="block text-sm font-medium text-gray-700">Hình Minh Họa</label>
-            <input type="text" name="HinhMinhHoa" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="file_input" type="file" name="file_input">
         </div>
 
         <div class="mb-4">

@@ -15,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editThucDon'])) {
     $ma_mon = $_POST['MaMon'];
     $ten_mon = $_POST['TenMon'];
     $don_gia = $_POST['DonGia'];
+    $hinh_minh_hoa = $_POST['hinh_minh_hoa'];
     $cong_thuc = $_POST['CongThuc'];
     $ngay_tao = $_POST['ngaytao'];
     // upload file
@@ -30,6 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editThucDon'])) {
             move_uploaded_file($fileTmpName, $uploadPath);
             $uploadPath = addslashes($uploadPath);
         }
+    }
+    if ($uploadPath === '') {
+        $uploadPath = $hinh_minh_hoa;
     }
     $sql = "UPDATE monan SET TenMon = '$ten_mon', DonGia = '$don_gia', HinhMinhHoa = '$uploadPath', CongThuc = '$cong_thuc', ngaytao = '$ngay_tao' WHERE MaMon = '$ma_mon'";
 
@@ -62,6 +66,9 @@ if ($result->num_rows > 0) {
 
 ?>
 <div class="px-5 py-3">
+    <?php
+    require_once __DIR__ . "../../breadcrumb.php";
+    ?>
     <div class="py-10">
         <h1 class="text-2xl font-bold text-black">Sửa Món Ăn</h1>
     </div>
@@ -83,6 +90,7 @@ if ($result->num_rows > 0) {
             <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Đăng tải hình
                 ảnh</label>
             <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="file_input" type="file" name="file_input">
+            <input type="hidden" name="hinh_minh_hoa" value="<?php echo $hinh_minh_hoa; ?>">
         </div>
         <div class="mb-4">
             <label for="CongThuc" class="block text-sm font-medium text-gray-700">Công Thức</label>

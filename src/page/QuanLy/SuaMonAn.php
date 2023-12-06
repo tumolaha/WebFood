@@ -12,12 +12,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editThucDon'])) {
     $cong_thuc = $_POST['CongThuc'];
     $trang_thai = $_POST['trangthai'];
     $ngay_tao = $_POST['ngaytao'];
+    $uploadPath = '';
+    if (isset($_FILES['file_input'])) {
+        $file = $_FILES['file_input'];
+        $fileName = $file['name'];
+        $fileTmpName = $file['tmp_name'];
+        $fileError = $file['error'];
 
-    $sql = "UPDATE monan SET TenMon = '$ten_mon', DonGia = '$don_gia', HinhMinhHoa = '$hinh_minh_hoa', CongThuc = '$cong_thuc', trangthai = '$trang_thai', ngaytao = '$ngay_tao' WHERE MaMon = '$ma_mon'";
+        if ($fileError === 0) {
+            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/webfood/src/uploads/' . $fileName;
+            move_uploaded_file($fileTmpName, $uploadPath);
+            $uploadPath = addslashes($uploadPath);
+        }
+    }
+    if ($uploadPath === '') {
+        $uploadPath = $hinh_minh_hoa;
+    }
+
+    $sql = "UPDATE monan SET TenMon = '$ten_mon', DonGia = '$don_gia', HinhMinhHoa = '$uploadPath', CongThuc = '$cong_thuc', trangthai = '$trang_thai', ngaytao = '$ngay_tao' WHERE MaMon = '$ma_mon'";
 
     if ($conn->query($sql) === TRUE) {
         echo 'Record updated successfully';
-        echo '<script> location.replace("QuanLyThucDon.php"); </script>';
+        echo '<script> location.replace("QuanLyMon.php"); </script>';
     } else {
         echo "Error updating record: " . $conn->error;
     }
@@ -50,11 +66,14 @@ if ($result->num_rows > 0) {
 $conn->close();
 ?>
 <div class="px-5 py-10">
+    <?php
+    require_once __DIR__ . "../../breadcrumb.php";
+    ?>
     <div class="py-10">
         <h1 class="text-2xl font-bold text-black">Sửa Món Ăn</h1>
     </div>
 
-    <form action="SuaMonAn.php" method="POST">
+    <form action="SuaMonAn.php" method="POST" enctype="multipart/form-data">
         <div class="mb-4">
             <label for="MaMon" class="block text-sm font-medium text-gray-700">Mã Món</label>
             <input type="text" name="MaMon" value="<?php echo $ma_mon; ?>" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
@@ -69,7 +88,8 @@ $conn->close();
         </div>
         <div class="mb-4">
             <label for="HinhMinhHoa" class="block text-sm font-medium text-gray-700">Hình Minh Họa</label>
-            <input type="text" name="HinhMinhHoa" value="<?php echo $hinh_minh_hoa; ?>" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="file_input" type="file" name="file_input">
+            <input type="hidden" name="HinhMinhHoa" value="<?php echo $hinh_minh_hoa; ?>">
         </div>
         <div class="mb-4">
             <label for="CongThuc" class="block text-sm font-medium text-gray-700">Công Thức</label>

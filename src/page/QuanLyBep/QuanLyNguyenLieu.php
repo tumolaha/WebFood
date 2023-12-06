@@ -43,13 +43,15 @@ $sql .= 'GROUP BY nguyenlieu.MaNL LIMIT ' . $this_page_first_result . ',' .  $re
 $result = mysqli_query($conn, $sql);
 
 ?>
-<div class="w-full">
-  <!-- content -->
-  <div class="">
-    <h1 class="text-2xl font-bold text-black">Quản lý nguyên vật liệu</h1>
+<div class=" w-full overflow-auto">
+  <?php
+  require_once __DIR__ . "../../breadcrumb.php";
+  ?>
+  <div class=" px-5 py-10">
+    <h1 class="text-2xl font-bold text-black">Quản Nguyên Liệu </h1>
   </div>
 
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-2">
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-2">
     <div class="pb-4  flex justify-end">
       <a href="./ThemNguyenLieu.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm sản phẩm</a>
     </div>

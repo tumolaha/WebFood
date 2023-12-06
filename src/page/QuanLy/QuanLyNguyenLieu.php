@@ -36,15 +36,16 @@ $this_page_first_result = ($page - 1) * $results_per_page;
 
 
 // Retrieve selected results from database and display them on page
-$sql = 'SELECT * FROM nguyenlieu LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
+$sql = 'SELECT nguyenlieu.*, SUM(danhsachnl.SoLuong) AS TongSoLuong FROM nguyenlieu JOIN danhsachnl ON nguyenlieu.MaNL = danhsachnl.MaNL GROUP BY nguyenlieu.MaNL LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
 $result = mysqli_query($conn, $sql);
 // Handle delete request
-
 ?>
-<div class="w-full">
-  <!-- content -->
-  <div class="">
-    <h1 class="text-2xl font-bold text-black">Quản lý nguyên vật liệu</h1>
+<div class=" w-full overflow-auto">
+  <?php
+  require_once __DIR__ . "../../breadcrumb.php";
+  ?>
+  <div class=" px-5 py-10">
+    <h1 class="text-2xl font-bold text-black">Quản Nguyên Liệu </h1>
   </div>
 
 
@@ -82,7 +83,7 @@ $result = mysqli_query($conn, $sql);
             echo '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaNL"] . '</th>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["NgayNhap"] . '</td>';
-            echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
+            echo '<td class="px-6 py-4 text-gray-900">' . $row["TongSoLuong"] . '</td>';
             echo '<td class="px-6 flex gap-2 py-4 text-gray-900 font-bold">';
             echo '<a href="./SuaNguyenLieu.php?id=' . $row["MaNL"] . '" class="font-medium text-blue-600 hover:underline">Sửa</a>';
             echo '<button type="button" class="font-medium text-red-600 hover:underline" onclick="openModal(' . $row['MaNL'] . ')">Xoá</button>';

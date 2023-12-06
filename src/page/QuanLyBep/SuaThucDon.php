@@ -64,7 +64,11 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
+
 <div class="px-5 py-10">
+    <?php
+    require_once __DIR__ . "../../breadcrumb.php";
+    ?>
     <div class="py-10">
         <h1 class="text-2xl font-bold text-black">Sửa Thực Đơn</h1>
     </div>

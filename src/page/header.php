@@ -1,6 +1,6 @@
-<?php 
+<?php
 ob_start();
-session_start(); 
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -60,9 +60,9 @@ session_start();
 
 </head>
 
-<body>
+<body class="overflow-hidden w-screen">
 
-  <section class="header">
+  <section class="header w-full ">
     <nav class="bg-gray-800">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">

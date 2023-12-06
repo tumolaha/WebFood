@@ -43,6 +43,9 @@ if (isset($_GET['deleteId'])) {
 }
 
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class="px-4 py-5 text-lg flex justify-between">
     <h1 class="text-2xl font-bold text-black">Xem Nguyên Liệu</h1>
     <button class="px-4 py-2 bg-blue-500 text-white rounded" onclick="openModal()">Thêm</button>

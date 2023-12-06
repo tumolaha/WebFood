@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wed Food</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="./Sidebar/css/style.css">
 </head>
@@ -19,6 +18,8 @@
         <?php include_once("./Sidebar/html/index.php"); ?>
         <section class="content w-full px-10 ml-20 py-5">
             <h1 class="text-2xl font-bold">Xem thông tin đơn đặt món</h1>
+            <?php include_once("breadcrumb.php"); ?>
+
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
                 <table class="w-full text-sm text-left text-gray-500 ">
@@ -46,23 +47,15 @@
                         <?php
                         include("dbConnection.php");
 
-                        if (isset($_POST['confirmCancel'])) {
-                            $id = $_POST['cancelId'];
-                            $sql = "UPDATE dondatmon SET trangthai = 2 WHERE MaMon = $id";
-                            $result = mysqli_query($conn, $sql);
-                            if ($result) {
-                                echo "<script>alert('Hủy đơn hàng thành công')</script>";
-                            } else {
-                                echo "<script>alert('Hủy đơn hàng thất bại')</script>";
-                            }
-                        } elseif (isset($_POST['confirmApprove'])) {
+
+                        if (isset($_POST['confirmApprove'])) {
                             $id = $_POST['approveId'];
                             $sql = "UPDATE dondatmon SET trangthai = 2 WHERE MaMon = $id";
                             $result = mysqli_query($conn, $sql);
                             if ($result) {
-                                echo "<script>alert('Duyệt đơn hàng thành công')</script>";
+                                echo "<script>alert('Hủy hàng thành công')</script>";
                             } else {
-                                echo "<script>alert('Duyệt đơn hàng thất bại')</script>";
+                                echo "<script>alert('Hủy hàng thất bại')</script>";
                             }
                         }
                         $sql = "SELECT * FROM dondatmon join monan on dondatmon.MaMon = monan.MaMon WHERE dondatmon.trangthai = 0";
@@ -148,7 +141,6 @@
     <!-- content -->
 
     <script>
-
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
             if (modal) {

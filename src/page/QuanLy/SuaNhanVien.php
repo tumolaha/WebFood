@@ -2,7 +2,11 @@
 require_once __DIR__ . '../../Header.php';
 require_once __DIR__ . '/SidebarQuanLy.php';
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class="w-full flex item-center justify-between">
+
   <div>
     <h5 class="text-xl font-bold text-black">Thêm Nhân Viên</h5>
   </div>
@@ -33,6 +37,7 @@ if (isset($_POST["editEmployee"])) {
 
 }
 ?>
+
 <form action="SuaNhanvVien.php" method="post" data-parsley-validate="" enctype="multipart/form-data">
   <?php
   if (mysqli_num_rows($query_run) > 0) {

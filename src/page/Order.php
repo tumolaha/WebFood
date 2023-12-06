@@ -29,7 +29,6 @@ if (isset($_POST['submit'])) {
     } else {
         echo "<script>alert('Đặt món thất bại')</script>";
     }
-
 }
 $getNhanVienSql = "SELECT MaNV, TenNV FROM nhanvien";
 $nhanVienResult = mysqli_query($conn, $getNhanVienSql);
@@ -47,18 +46,18 @@ while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="./Sidebar/css/style.css">
 </head>
 
 <body>
-    <?php include_once("header.php"); ?>
     <div class="flex w-screen bg-blue-100/30">
         <?php include_once("./Sidebar/html/index.php"); ?>
         <section class="content w-full ml-20 px-10 py-5">
+            <?php include_once("breadcrumb.php"); ?>
+
             <form method="post">
                 <div class="my-10 flex">
                     <img class="w-[350px] h-[300px] rounded-lg" src="<?php echo $url; ?>" alt="">
@@ -68,8 +67,7 @@ while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
                         </p>
                         <div class="flex items-center gap-10 justify-center text-xl">
                             <p>Số lượng</p>
-                            <input type="text" value="1" name="input" class="input border-[1px] w-5 h-5 text-center"
-                                id="input">
+                            <input type="text" value="1" name="input" class="input border-[1px] w-5 h-5 text-center" id="input">
                             <div class="flex flex-col">
                                 <button class="btn" onclick="increase(event)">^</button>
                                 <button class="btn" onclick="decrease(event)">v</button>
@@ -82,9 +80,7 @@ while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
                 </div>
                 <div class="mb-5">
                     <label for="manv" class="block text-sm font-medium text-gray-700"> Nhân viên đật món</label>
-                    <select name="manv"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        required>
+                    <select name="manv" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required>
                         <?php foreach ($nhanVienList as $maNV => $tenNV) { ?>
                             <option value="<?php echo $maNV; ?>">
                                 <?php echo $tenNV; ?>

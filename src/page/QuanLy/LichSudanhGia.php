@@ -11,11 +11,14 @@ if (isset($_GET['date'])) {
 }
 
 // Get the datmon data for the selected date
-$query = "SELECT * FROM `dondatmon` WHERE DATE(ngaydat) = '$selectedDate' ORDER BY ngaydat ASC";
+$query = "SELECT * FROM `dondatmon` WHERE DATE(ngaydat) = '$selectedDate' ORDER BY ngaydat ASC ";
 $result = mysqli_query($conn, $query);
 
 
 // Render the data table
+?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
 ?>
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Lịch sử đánh giá</h1>
@@ -50,7 +53,17 @@ $result = mysqli_query($conn, $query);
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['MaMon'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['NgayDat'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['TongTien'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $orderRow['TrangThai'] . "</td>";
+                echo "<td class='py-3 px-6 text-left'>";
+                if ($orderRow['TrangThai'] == 0) {
+                    echo "<span class='bg-yellow-500 text-white py-1 px-2 rounded'>Đã đặt</span>";
+                } elseif ($orderRow['TrangThai'] == 2) {
+                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
+                } elseif ($orderRow['TrangThai'] == 1) {
+                    echo "<span class='bg-red-500 text-white py-1 px-2 rounded'>Đã hủy</span>";
+                } elseif ($orderRow['TrangThai'] == 3) {
+                    echo "<span class='bg-blue-500 text-white py-1 px-2 rounded'>Đã thanh toán</span>";
+                }
+                echo "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['DanhGia'] . "</td>";
                 echo "</tr>";
             }

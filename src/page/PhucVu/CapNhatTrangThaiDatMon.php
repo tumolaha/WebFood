@@ -41,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class="px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Phiếu đề xuất</h1>
 </div>
@@ -85,9 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Render order status
                 if ($menuRow['TrangThai'] == 0) {
                     echo "<span class='bg-yellow-500 text-white py-1 px-2 rounded'>Đã đặt</span>";
-                } elseif ($menuRow['TrangThai'] == 2) {
-                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
                 } elseif ($menuRow['TrangThai'] == 1) {
+                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
+                } elseif ($menuRow['TrangThai'] == 2) {
                     echo "<span class='bg-red-500 text-white py-1 px-2 rounded'>Đã hủy</span>";
                 }
 
@@ -95,13 +98,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . "</td>";
 
                 // Add check to update order only if it is not canceled
-                if ($menuRow['TrangThai'] != 1) {
+                if ($menuRow['TrangThai'] != 2) {
                     echo "<td class='py-3 px-6 text-left'>";
                     echo "<form method='POST'  action='CapNhatTrangThaiDatMon.php' class='flex flex-nowrap'>";
                     echo "<input type='hidden' name='maDon' value='" . $menuRow['MaDon'] . "'>";
                     echo "<select name='trangThai'>";
                     echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
-                    echo "<option value='2' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
+                    echo "<option value='1' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
                     echo "</select>";
                     echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
                     echo "</form>";

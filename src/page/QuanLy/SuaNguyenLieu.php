@@ -3,6 +3,9 @@ require __DIR__ . '../../header.php';
 require_once __DIR__ . '/SidebarQuanLy.php';
 require_once __DIR__ . '../../dbConnection.php';
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class="w-full flex item-center justify-between">
     <div>
         <h5 class="text-xl font-bold text-black">Thêm Nguyên Vật Liệu</h5>
@@ -55,6 +58,7 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 ?>
+
 <div class="p-2"></div>
 <form method="post" action="SuaNguyenLieu.php">
     <div class="relative z-0 w-full mb-6 group">

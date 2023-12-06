@@ -35,6 +35,9 @@ while ($row = mysqli_fetch_assoc($result)) {
   $maMtkList[$row['MaTK']] = $row['Username'];
 }
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class="w-full flex item-center justify-between">
   <div>
     <h5 class="text-xl font-bold text-black">Thêm Nhân Viên</h5>

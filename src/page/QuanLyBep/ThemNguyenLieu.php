@@ -29,6 +29,9 @@ if (isset($_POST['submit'])) {
   }
 }
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class="w-full flex item-center justify-between">
   <div>
     <h5 class="text-xl font-bold text-black">Thêm Nguyên Vật Liệu</h5>

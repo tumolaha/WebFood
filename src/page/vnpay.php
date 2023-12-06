@@ -12,7 +12,9 @@
     include 'dbConnection.php';
     if (isset($_GET['MaDon'])) {
         $maDon = $_GET['MaDon'];
-        $sql = "SELECT * FROM dondatmon join monan on monan.MaMon = dondatmon.MaMon WHERE dondatmon.trangthai = 1";
+        $month = $_GET['Thang'];
+        $year = $_GET['Nam'];
+        $sql = "SELECT * FROM dondatmon join monan on monan.MaMon = dondatmon.MaMon WHERE dondatmon.trangthai = 1 and MONTH(NgayDat) = $month and YEAR(NgayDat) = $year";
         $result = mysqli_query($conn, $sql);
         // sau khi query result là một array
         $ids = "";
@@ -27,7 +29,7 @@
         $vnp_Returnurl = "http://localhost/webfood/src/page/paymentSuccess.php";
         $vnp_TmnCode = "FFA10NKZ"; //Mã website tại VNPAY 
         $vnp_HashSecret = "PJSLLDYELYVGDFBUUBHNDUQMNIFDXVBJ"; //Chuỗi bí mật
-    
+
         $vnp_TxnRef = rand(00, 9999); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = $ids . 'token' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT); //mô tả đơn hàng
         $vnp_OrderType = "billpayment";
@@ -116,10 +118,8 @@
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
         $returnData = array(
-            'code' => '00'
-            ,
-            'message' => 'success'
-            ,
+            'code' => '00',
+            'message' => 'success',
             'data' => $vnp_Url
         );
         if (isset($_POST['redirect'])) {

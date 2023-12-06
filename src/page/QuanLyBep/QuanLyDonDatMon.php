@@ -7,8 +7,15 @@ require_once __DIR__ . '../../dbConnection.php';
 // Define how many results you want per page
 $results_per_page = 10;
 
-// Find out the number of results stored in database
+// Check if a specific date is selected for filtering
+$filter_date = isset($_GET['date']) ? $_GET['date'] : '';
+
+// Prepare the SQL query based on the filter date
 $sql = 'SELECT * FROM dondatmon';
+if (!empty($filter_date)) {
+    $sql .= " WHERE NgayDat = '$filter_date'";
+}
+
 $result = mysqli_query($conn, $sql);
 $number_of_results = mysqli_num_rows($result);
 
@@ -16,11 +23,51 @@ $number_of_results = mysqli_num_rows($result);
 $number_of_pages = ceil($number_of_results / $results_per_page);
 
 ?>
+<?php
+require_once __DIR__ . "../../breadcrumb.php";
+?>
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Đơn Đặt Món</h1>
 </div>
 
 <div class="content flex-1 mt-2 ml-8">
+    <form action="" method="GET" class="filter-form">
+        <label for="date" class="filter-label">Lọc Theo Ngày:</label>
+        <input type="date" id="date" name="date" value="<?php echo $filter_date; ?>" class="filter-input">
+        <button type="submit" class="filter-button">Lọc</button>
+    </form>
+    <style>
+        .filter-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .filter-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .filter-button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .filter-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 
     <table class="table-auto w-full">
         <thead>
@@ -54,10 +101,12 @@ $number_of_pages = ceil($number_of_results / $results_per_page);
 
                 if ($menuRow['TrangThai'] == 0) {
                     echo "<span class='bg-yellow-500 text-white py-1 px-2 rounded'>Đã đặt</span>";
-                } elseif ($menuRow['TrangThai'] == 2) {
-                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
                 } elseif ($menuRow['TrangThai'] == 1) {
+                    echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
+                } elseif ($menuRow['TrangThai'] == 2) {
                     echo "<span class='bg-red-500 text-white py-1 px-2 rounded'>Đã hủy</span>";
+                } elseif ($menuRow['TrangThai'] == 3) {
+                    echo "<span class='bg-blue-500 text-white py-1 px-2 rounded'>Đã Thanh Toán</span>";
                 }
 
                 echo "</td>";

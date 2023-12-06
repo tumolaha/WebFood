@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
@@ -58,7 +57,7 @@
             </div>
             <div class="bottom-content">
                 <li class="nav-link">
-                    <a href="#">
+                    <a href="/webfood/src/page/login.php">
                         <i class='bx bx-log-out icon'></i>
                         <span class="text nav-text">Log out</span>
                     </a>
