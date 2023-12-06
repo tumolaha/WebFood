@@ -3,7 +3,6 @@ require __DIR__ . '../../header.php';
 require __DIR__ . '/SiderbarQuanLyBep.php';
 require_once __DIR__ . '../../dbConnection.php';
 
-
 // Handle delete request
 if (isset($_POST['delete_id'])) {
   $id = $_POST['delete_id'];
@@ -15,8 +14,6 @@ if (isset($_POST['delete_id'])) {
     echo "Error deleting record: " . $conn->error;
   }
 }
-
-
 
 // Define how many results you want per page
 $results_per_page = 10;
@@ -37,9 +34,13 @@ if (!isset($_GET['page'])) {
 $this_page_first_result = ($page - 1) * $results_per_page;
 
 // Retrieve selected results from database and display them on page
-$sql = 'SELECT * FROM nguyenlieu LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
+$dateFilter = isset($_GET['date']) ? $_GET['date'] : '';
+$sql = 'SELECT nguyenlieu.*, SUM(danhsachnl.SoLuong) AS TongSoLuong FROM nguyenlieu JOIN danhsachnl ON nguyenlieu.MaNL = danhsachnl.MaNL ';
+if (!empty($dateFilter)) {
+  $sql .= " WHERE NgayNhap = '$dateFilter'";
+}
+$sql .= 'GROUP BY nguyenlieu.MaNL LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
 $result = mysqli_query($conn, $sql);
-
 
 ?>
 <div class="w-full">
@@ -48,13 +49,18 @@ $result = mysqli_query($conn, $sql);
     <h1 class="text-2xl font-bold text-black">Quản lý nguyên vật liệu</h1>
   </div>
 
-
-
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-2">
     <div class="pb-4  flex justify-end">
-      <a href="./ThemNguyenLieu.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm
-        sản phẩm</a>
+      <a href="./ThemNguyenLieu.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm sản phẩm</a>
     </div>
+    <div class="pb-4 flex justify-start gap-10">
+      <form action="QuanLyNguyenLieu.php" method="GET">
+        <input type="date" name="date" value="<?php echo $dateFilter; ?>" class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg text-sm px-5 py-2.5">Lọc</button>
+      </form>
+      <a href="QuanLyNguyenLieu.php" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg text-sm px-5 py-2.5">Xoá lọc</a>
+    </div>
+
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase text-center bg-gray-300">
         <th scope="col" class="px-6 py-3">
@@ -79,16 +85,13 @@ $result = mysqli_query($conn, $sql);
 
         <!-- render table -->
         <?php
-
-
-
         if ($result->num_rows > 0) {
           // output data of each row
           while ($row = $result->fetch_assoc()) {
             echo '<tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-500 text-center dark:hover:bg-gray-300">';
             echo '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaNL"] . '</th>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
-            echo '<td class="px-6 py-4 text-gray-900">' . $row["NgayNhap"] . '</td>';
+            echo '<td class="px-6 py-4 text-gray-900">' . $row["TongSoLuong"] . '</td>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["NgayNhap"] . '</td>';
             echo '<td class="px-6 flex gap-2 py-4 text-gray-900 font-bold">';
             echo '<a href="./SuaNguyenLieu.php?id=' . $row["MaNL"] . '" class="font-medium text-blue-600 hover:underline">Sửa</a>';
@@ -99,13 +102,7 @@ $result = mysqli_query($conn, $sql);
         } else {
           echo "0 results";
         }
-
-
-
         ?>
-
-
-
       </tbody>
     </table>
     <div class="flex flex-col items-end justify-center">
@@ -122,7 +119,6 @@ $result = mysqli_query($conn, $sql);
       }
       ?>
     </div>
-
   </div>
 
   <!-- Modal -->

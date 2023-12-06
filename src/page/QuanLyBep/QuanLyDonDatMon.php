@@ -19,6 +19,7 @@ $number_of_pages = ceil($number_of_results / $results_per_page);
 <div class=" px-5 py-10">
     <h1 class="text-2xl font-bold text-black">Quản lý Đơn Đặt Món</h1>
 </div>
+
 <div class="content flex-1 mt-2 ml-8">
 
     <table class="table-auto w-full">
@@ -38,6 +39,7 @@ $number_of_pages = ceil($number_of_results / $results_per_page);
             <?php
             // Loop through menu data
             while ($menuRow = mysqli_fetch_assoc($result)) {
+
                 echo "<tr>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaDon'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaNV'] . "</td>";
