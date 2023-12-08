@@ -7,11 +7,11 @@ require_once __DIR__ . '../../dbConnection.php';
 $results_per_page = 10;
 
 // Get the filter values
-$filterDate = $_GET['date'] ?? '';
+$filterDate = $_GET['date'] ?? date("Y-m-d");
 $filterMaNV = $_GET['maNV'] ?? '';
 
 // Build the SQL query with filters
-$sql = "SELECT * FROM dondatmon WHERE 1=1";
+$sql = "SELECT * FROM dondatmon  LEFT JOIN menu ON menu.MaMenu = dondatmon.MaMenu WHERE dondatmon.TrangThai != 3";
 if (!empty($filterDate)) {
     $sql .= " AND NgayDat = '$filterDate'";
 }
@@ -30,8 +30,8 @@ $number_of_pages = ceil($number_of_results / $results_per_page);
 
 // Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $orderId = $_POST['maDon'];
-    $status = $_POST['trangThai'];
+    $orderId = $_POST['MaDon'];
+    $status = $_POST['TrangThai'];
     echo $orderId;
     echo $status;
     // Call the updateOrderStatus function
@@ -92,21 +92,28 @@ require_once __DIR__ . "../../breadcrumb.php";
                     echo "<span class='bg-green-500 text-white py-1 px-2 rounded'>Đã giao</span>";
                 } elseif ($menuRow['TrangThai'] == 2) {
                     echo "<span class='bg-red-500 text-white py-1 px-2 rounded'>Đã hủy</span>";
+                } elseif ($menuRow['TrangThai'] == 3) {
+                    echo "<span class='bg-blue-500 text-white py-1 px-2 rounded'>Đã thanh toán</span>";
                 }
 
                 echo "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . "</td>";
+                if ($menuRow['DanhGia'] == null) {
+                    $menuRow['DanhGia'] = "Chưa đánh giá";
+                    echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . " </td>";
+                } else {
+                    echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . " sao </td>";
+                }
 
                 // Add check to update order only if it is not canceled
                 if ($menuRow['TrangThai'] != 2) {
                     echo "<td class='py-3 px-6 text-left'>";
                     echo "<form method='POST'  action='CapNhatTrangThaiDatMon.php' class='flex flex-nowrap'>";
-                    echo "<input type='hidden' name='maDon' value='" . $menuRow['MaDon'] . "'>";
-                    echo "<select name='trangThai'>";
-                    echo "<option value='0' " . ($menuRow['TrangThai'] == 0 ? "selected" : "") . ">Chưa giao</option>";
-                    echo "<option value='1' " . ($menuRow['TrangThai'] == 2 ? "selected" : "") . ">Đã giao</option>";
-                    echo "</select>";
-                    echo "<button class='ml-4' type='submit' style='background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
+                    echo "<input type='hidden' name='MaDon' value='" . $menuRow['MaDon'] . "'>";
+                    if ($menuRow['TrangThai'] == 0) {
+                        echo "<button name='TrangThai' value='1' class='ml-4' type='submit' style='background-color: blue; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>giao hang</button>";
+                    } else {
+                        echo "<button name='TrangThai' value='0' class='ml-4' type='submit' style='background-color: red; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>chưa giao</button>";
+                    }
                     echo "</form>";
                     echo "</td>";
                 } else {

@@ -18,7 +18,7 @@
         <?php include_once("./Sidebar/html/index.php"); ?>
 
         <!-- content -->
-        <section class="content w-full px-10 ml-20 py-5">
+        <section class="content w-full px-10  py-5">
             <h1 class="text-2xl font-bold">Lịch sử đặt món
             </h1>
             <?php include_once("breadcrumb.php"); ?>
@@ -76,7 +76,7 @@
                                 . '</script>';
                         }
 
-                        $sql = "SELECT * FROM dondatmon WHERE trangthai IN (1, 3) AND MONTH(NgayDat) = $month and YEAR(NgayDat) = $year";
+                        $sql = "SELECT * FROM dondatmon join menu on dondatmon.MaMenu = menu.MaMenu WHERE trangthai IN (1, 3) AND MONTH(NgayDat) = $month and YEAR(NgayDat) = $year";
                         $result = mysqli_query($conn, $sql);
                         $total = 0;
                         while ($row = mysqli_fetch_assoc($result)) {
@@ -86,7 +86,7 @@
                             $result1 = mysqli_query($conn, $sql1);
                             $row1 = mysqli_fetch_assoc($result1);
                             if ($row['TrangThai'] == 1)
-                                $total += $row1['DonGia'] * $row['soluong'];
+                                $total += $row['gia'] * $row['soluong'];
                             $imagePath = $row1['HinhMinhHoa'];
 
                             $srcPosition = strpos($imagePath, 'src');
@@ -105,7 +105,7 @@
                                 ' . $row1['TenMon'] . '
                             </td>
                             <td class="px-6 py-4">
-                                ' . $row1['DonGia'] . '
+                                ' . $row['gia'] . '
                             </td>
                             <td class="px-6 py-4">
                                 ' . $row['soluong'] . '
@@ -120,7 +120,7 @@
                             <td class="px-6 py-4">
                                 <button onclick="openModal(' . $row['MaDon'] . ')" class="text-sm text-blue-500 cursor-pointer">Đánh giá</button>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 ">
                                 ' . ($row['TrangThai'] == 3 ? 'Đã thanh toán' : 'Chưa thanh toán') . '
                         </tr>
                     ';
@@ -144,7 +144,7 @@
                         echo "<script>alert('Đánh giá thất bại')</script>";
                     }
                 }
-                $sql = "SELECT * FROM dondatmon join monan on dondatmon.MaMon = monan.MaMon WHERE dondatmon.trangthai = 1 and MONTH(NgayDat) = $month and YEAR(NgayDat) = $year";
+                $sql = "SELECT * FROM dondatmon join menu on menu.MaMenu = dondatmon.MaMenu join monan on menu.MaMon = monan.MaMon WHERE dondatmon.trangthai = 1 and MONTH(NgayDat) = $month and YEAR(NgayDat) = $year";
                 $result = mysqli_query($conn, $sql);
                 $total = 0;
                 $list = array();
@@ -153,8 +153,8 @@
                     $sql1 = "SELECT * FROM monan WHERE MaMon = $id";
                     $result1 = mysqli_query($conn, $sql1);
                     $row1 = mysqli_fetch_assoc($result1);
-                    $total += ($row['DonGia'] * $row['soluong']);
-                    array_push($list, array($row1['TenMon'], $row['soluong'], $row['DonGia']));
+                    $total += ($row['gia'] * $row['soluong']);
+                    array_push($list, array($row1['TenMon'], $row['soluong'], $row['gia']));
                 }
 
                 ?>

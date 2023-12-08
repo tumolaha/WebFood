@@ -49,7 +49,7 @@ if (!isset($_GET['page'])) {
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-2">
         <div class="pb-4  flex justify-end">
             <a href="./ThemMonAn.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm
-                sản phẩm</a>
+                món ăn</a>
         </div>
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase text-center bg-gray-300">
@@ -59,10 +59,7 @@ if (!isset($_GET['page'])) {
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Tên Món
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Đơn Giá
-                    </th>
+
                     <th scope="col" class="px-6 py-3">
                         Hình Minh Họa
                     </th>
@@ -102,7 +99,6 @@ if (!isset($_GET['page'])) {
                         echo '<tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-500 text-center dark:hover:bg-gray-300">';
                         echo '<td scope="row"  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaMon"] . '</td>';
                         echo '<td class="px-6 py-4 text-gray-900">' . $row["TenMon"] . '</td>';
-                        echo '<td class="px-6 py-4 text-gray-900">' . $row["DonGia"] . '</td>';
                         echo '<td class="px-6 py-4 text-gray-900"> <img class="p-8 rounded-t-lg" src="' . $url . '" alt="Image" width="200" height="200" />';
                         echo '<td class="px-6 py-4 text-gray-900">' . $row["CongThuc"] . '</td>';
                         echo '<td class="px-6 py-4 text-gray-900">' . $row["trangthai"] . '</td>';

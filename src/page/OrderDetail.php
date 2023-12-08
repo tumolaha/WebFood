@@ -16,13 +16,14 @@
     <div class="flex w-screen bg-blue-100/30">
 
         <?php include_once("./Sidebar/html/index.php"); ?>
-        <section class="content w-full px-10 ml-20 py-5 flex justify-center items-center">
+
+        <section class="content w-full px-10  py-5  justify-center items-center">
             <?php include_once("breadcrumb.php"); ?>
 
             <?php
             include 'dbConnection.php';
             $id = $_GET['id'];
-            $sql = "SELECT * FROM dondatmon join monan on monan.MaMon = dondatmon.MaMon WHERE MaDon = $id";
+            $sql = "SELECT * FROM dondatmon join menu on menu.MaMenu = dondatmon.MaMenu join monan on monan.MaMon = menu.MaMon WHERE MaDon = $id";
             $result = mysqli_query($conn, $sql);
             $row = mysqli_fetch_assoc($result);
             $imagePath = $row['HinhMinhHoa'];
@@ -35,7 +36,8 @@
             $url = 'http://localhost/webfood/' . $imagePath;
             $url = str_replace('\\', '/', $url); // Replace backslashes with forward slashes
             ?>
-            <div class="relative flex flex-col text-gray-700 w-[700px]  items-center bg-white shadow-md w-96 rounded-xl bg-clip-border">
+            <div class="relative flex flex-col text-gray-700 w-[700px] mt-[70px] mx-auto items-center bg-white shadow-md w-96 rounded-xl bg-clip-border">
+
                 <div class="relative h-80 mx-4 -mt-6 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
                     <img src="<?php echo $url ?>" class="object-cover w-full h-full" alt="img-blur-shadow" layout="fill" />
                 </div>
@@ -51,7 +53,7 @@
                 <div class="p-6 pt-0 flex  gap-20">
                     <p class="select-none rounded-lg bg-yellow-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all " type="p" data-ripple-light="true">
                         Đơn giá :
-                        <?php echo $row['DonGia'] ?>
+                        <?php echo $row['gia'] ?>
                     </p>
                     <p class="select-none rounded-lg bg-yellow-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-yellow-500/20 transition-all " type="p" data-ripple-light="true">
                         Số lượng:

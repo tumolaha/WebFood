@@ -14,8 +14,10 @@
 <body>
     <div class="flex w-screen bg-blue-100/30">
 
-        <?php include_once("./Sidebar/html/index.php"); ?>
-        <section class="content w-full ml-20 px-10 py-5">
+        <?php
+        session_start();
+        include_once("./Sidebar/html/index.php"); ?>
+        <section class="content w-full  px-10 py-5">
             <?php include_once("breadcrumb.php"); ?>
 
             <?php
@@ -28,10 +30,9 @@
             }
 
             $errors = [];
-
+            $maNV = $_SESSION['user'];
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $tenMon = $_POST['tenmon'];
-                $maNV = $_POST['manv'];
 
                 // Insert data into monan table
                 $insertDexuatSql = "INSERT INTO monan (TenMon, MaNV,ngaytao) VALUES ('$tenMon', '$maNV',date('Y-m-d'))";
@@ -63,16 +64,7 @@
                     <label for="tenmon" class="block mb-2 text-sm font-medium text-gray-900 ">Tên món</label>
                     <input type="tenmon" id="tenmon" name="tenmon" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="Nhập tên món muốn đề xuất" required>
                 </div>
-                <div class="mb-5">
-                    <label for="manv" class="block text-sm font-medium text-gray-700"> Mã NV</label>
-                    <select name="manv" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required>
-                        <?php foreach ($nhanVienList as $maNV => $tenNV) { ?>
-                            <option value="<?php echo $maNV; ?>">
-                                <?php echo $tenNV; ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
+
 
 
 

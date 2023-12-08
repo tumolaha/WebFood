@@ -8,10 +8,10 @@ require_once __DIR__ . '../../dbConnection.php';
 $results_per_page = 10;
 
 // Check if a specific date is selected for filtering
-$filter_date = isset($_GET['date']) ? $_GET['date'] : '';
+$filter_date = isset($_GET['date']) ? $_GET['date'] : date("Y-m-d");
 
 // Prepare the SQL query based on the filter date
-$sql = 'SELECT * FROM dondatmon';
+$sql = 'SELECT *, dondatmon.MaNV FROM dondatmon LEFT JOIN menu ON dondatmon.MaMenu = menu.MaMenu LEFT JOIN monan ON menu.MaMon = monan.MaMon ';
 if (!empty($filter_date)) {
     $sql .= " WHERE NgayDat = '$filter_date'";
 }
@@ -74,7 +74,8 @@ require_once __DIR__ . "../../breadcrumb.php";
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal w-full">
                 <th class="py-3 px-6 text-left whitespace-nowrap">Mã Đơn</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Mã NV</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">Mã Món</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">Tên Món</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">Hình ảnh</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Ngày Đặt</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Tổng Tiền</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Đánh Giá</th>
@@ -86,15 +87,29 @@ require_once __DIR__ . "../../breadcrumb.php";
             <?php
             // Loop through menu data
             while ($menuRow = mysqli_fetch_assoc($result)) {
+                $imagePath = $menuRow['HinhMinhHoa'];
 
+                $srcPosition = strpos($imagePath, 'src');
+                if ($srcPosition !== false) {
+                    $imagePath = substr($imagePath, $srcPosition);
+                }
+
+                $url = 'http://localhost/webfood/' . $imagePath;
+                $url = str_replace('\\', '/', $url);
                 echo "<tr>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaDon'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaNV'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaMon'] . "</td>";
+                echo "<td class='py-3 px-6 text-left'>" . $menuRow['TenMon'] . "</td>";
+                echo '<td class="px-6 py-4 text-gray-900"> <img class="p-8 rounded-t-lg" src="' . $url . '" alt="Image" width="200" height="200" />';
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['NgayDat'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['TongTien'] . "</td>";
                 // echo "<td class='py-3 px-6 text-left'>" . $menuRow['TrangThai'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . "</td>";
+                if ($menuRow['DanhGia'] == null) {
+                    $menuRow['DanhGia'] = "Chưa đánh giá";
+                    echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . " </td>";
+                } else {
+                    echo "<td class='py-3 px-6 text-left'>" . $menuRow['DanhGia'] . " sao </td>";
+                }
 
                 // Add the approve button
                 echo "<td class='py-3 px-6 text-left'>";

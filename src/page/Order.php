@@ -2,8 +2,10 @@
 include "dbConnection.php";
 
 if (isset($_GET['id'])) {
+    session_start();
     $id = $_GET['id'];
-    $sql = "SELECT * FROM monan WHERE MaMon = $id";
+    $ngayban = $_GET['ngayban'];
+    $sql = "SELECT * FROM menu join monan on menu.MaMon = monan.MaMon WHERE menu.MaMon = $id and menu.ngayban = '$ngayban'";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $imagePath = $row['HinhMinhHoa'];
@@ -20,8 +22,8 @@ if (isset($_GET['id'])) {
 if (isset($_POST['submit'])) {
     $date = date('Y-m-d');
     $amount = $_POST['input'];
-    $manv = $_POST['manv'];
-    $query = "INSERT INTO `dondatmon`( `MaMon`, `soluong`, `TongTien`,`NgayDat`,`TrangThai`,`MaNV`) VALUES ( $id, $amount, $amount * $row[DonGia],'$date',0,$manv)";
+    $manv = $_SESSION['user'];
+    $query = "INSERT INTO `dondatmon`( `MaMenu`, `soluong`, `TongTien`,`NgayDat`,`TrangThai`,`MaNV`) VALUES ( $id, $amount, $amount * $row[gia],'$date',0,$manv)";
     $result = mysqli_query($conn, $query);
 
     if ($result) {
@@ -55,7 +57,7 @@ while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
 <body>
     <div class="flex w-screen bg-blue-100/30">
         <?php include_once("./Sidebar/html/index.php"); ?>
-        <section class="content w-full ml-20 px-10 py-5">
+        <section class="content w-full  px-10 py-5">
             <?php include_once("breadcrumb.php"); ?>
 
             <form method="post">
@@ -73,21 +75,12 @@ while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
                                 <button class="btn" onclick="decrease(event)">v</button>
                             </div>
                             <p name="total" id="total">
-                                <?php echo $row['DonGia'] ?> $
+                                <?php echo $row['gia'] ?> VNĐ
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="mb-5">
-                    <label for="manv" class="block text-sm font-medium text-gray-700"> Nhân viên đật món</label>
-                    <select name="manv" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required>
-                        <?php foreach ($nhanVienList as $maNV => $tenNV) { ?>
-                            <option value="<?php echo $maNV; ?>">
-                                <?php echo $tenNV; ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
+
                 <div class="flex justify-end">
                     <button type="submit" name="submit" class="w-[100px] rounded-2xl h-[40px] mr-32  bg-yellow-500">Đặt
                         món</button>
@@ -97,7 +90,7 @@ while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
     </div>
 </body>
 <script>
-    var price = <?php echo $row['DonGia']; ?>;
+    var price = <?php echo $row['gia']; ?>;
 
     function increase(event) {
         event.preventDefault();
@@ -118,7 +111,7 @@ while ($row1 = mysqli_fetch_assoc($nhanVienResult)) {
     function calculateTotal() {
         var quantity = document.getElementById('input').value;
         var total = quantity * price;
-        document.getElementById('total').innerText = total + '$';
+        document.getElementById('total').innerText = total + 'VNĐ';
     }
 </script>
 <script src="./Sidebar/js/script.js"></script>

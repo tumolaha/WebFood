@@ -9,7 +9,6 @@ require_once __DIR__ . "../../breadcrumb.php";
 <div class="w-full flex item-center justify-between">
     <div>
         <h5 class="text-xl font-bold text-black">Thêm Nguyên Vật Liệu</h5>
-
     </div>
 </div>
 <div class="w-full py-6"></div>
@@ -19,13 +18,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editNguyenLieu'])) {
     require_once __DIR__ . '../../dbConnection.php';
 
     $ma_nguyen_lieu = $_POST['ma_nguyen_lieu'];
+    $don_vi_tinh = $_POST['don_vi_tinh'];
 
 
     // MaNL does not exist, insert new record
     $ten_nguyen_lieu = $_POST['ten_nguyen_lieu'];
-    $so_luong = $_POST['so_luong'];
 
-    $sql = "UPDATE nguyenlieu SET TenNL='$ten_nguyen_lieu' WHERE MaNL='$ma_nguyen_lieu'";
+
+    $sql = "UPDATE nguyenlieu SET TenNL='$ten_nguyen_lieu', DonViTinh = '$don_vi_tinh' WHERE MaNL='$ma_nguyen_lieu'";
 
     if ($conn->query($sql) === TRUE) {
         echo 'Record updated successfully';
@@ -52,6 +52,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $ma_nguyen_lieu = $row['MaNL'];
     $ten_nguyen_lieu = $row['TenNL'];
+    $don_vi_tinh = $row['DonViTinh'];
 } else {
     echo "No results";
 }
@@ -68,6 +69,11 @@ $conn->close();
     <div class="relative z-0 w-full mb-6 group">
         <input type="text" name="ten_nguyen_lieu" value="<?php echo $ten_nguyen_lieu; ?>" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
         <label class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tên Nguyên liệu
+        </label>
+    </div>
+    <div class="relative z-0 w-full mb-6 group">
+        <input type="text" name="don_vi_tinh" value="<?php echo $don_vi_tinh; ?>" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Đơn vị tính
         </label>
     </div>
 

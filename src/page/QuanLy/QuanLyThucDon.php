@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '../../header.php';
-require_once __DIR__ . '/SiderbarQuanLyBep.php';
+require_once __DIR__ . '/SidebarQuanLy.php';
 require_once __DIR__ . '../../dbConnection.php';
 
 // Check if the delete button is clicked
@@ -51,7 +51,7 @@ require_once __DIR__ . "../../breadcrumb.php";
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
     <div class="pb-4  flex justify-end">
         <a href="./ThemThucDon.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm
-            sản phẩm</a>
+            Thực Đơn</a>
     </div>
     <div class="flex justify-start mb-3">
         <form action="QuanLyThucDon.php" method="GET">

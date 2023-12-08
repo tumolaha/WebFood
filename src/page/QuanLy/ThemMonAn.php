@@ -7,7 +7,6 @@ require_once __DIR__ . '../../dbConnection.php';
 if (isset($_POST['addNewMonAn'])) {
     // Get the form data
     $tenMon = $_POST['TenMon'];
-    $donGia = $_POST['DonGia'];
     $congThuc = $_POST['CongThuc'];
     $trangThai = $_POST['TrangThai'];
     $ngayTao = $_POST['NgayTao'];
@@ -35,7 +34,7 @@ if (isset($_POST['addNewMonAn'])) {
                 $uploadPath = addslashes($uploadPath);
             }
         }
-        $sql = "INSERT INTO monan (TenMon, DonGia, HinhMinhHoa, CongThuc, TrangThai, NgayTao) VALUES ( '$tenMon', '$donGia', '$uploadPath', '$congThuc', '$trangThai', '$ngayTao')";
+        $sql = "INSERT INTO monan (TenMon, HinhMinhHoa, CongThuc, TrangThai, NgayTao) VALUES ( '$tenMon', '$uploadPath', '$congThuc', '$trangThai', '$ngayTao')";
         // Execute the SQL query
         mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
@@ -80,8 +79,8 @@ if (isset($_POST['addNewMonAn'])) {
         <div class="mb-4">
             <label for="TrangThai" class="block text-sm font-medium text-gray-700">Trạng Thái</label>
             <select name="TrangThai" class="mt-1 py-2.5 px-2 border border-blue-500 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
-                <option value="1">Hoạt Động</option>
                 <option value="0">Ngừng Hoạt Động</option>
+                <option value="1">Hoạt Động</option>
             </select>
         </div>
 

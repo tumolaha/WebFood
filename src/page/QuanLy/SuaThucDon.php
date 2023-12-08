@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '../../header.php';
-require_once __DIR__ . '/SiderbarQuanLyBep.php';
+require_once __DIR__ . '/SidebarQuanLy.php';
 require_once __DIR__ . '../../dbConnection.php';
 
 // Check if the form is submitted

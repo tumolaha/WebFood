@@ -14,7 +14,6 @@ if (isset($_GET['MaMon'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editThucDon'])) {
     $ma_mon = $_POST['MaMon'];
     $ten_mon = $_POST['TenMon'];
-    $don_gia = $_POST['DonGia'];
     $hinh_minh_hoa = $_POST['hinh_minh_hoa'];
     $cong_thuc = $_POST['CongThuc'];
     $ngay_tao = $_POST['ngaytao'];
@@ -35,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editThucDon'])) {
     if ($uploadPath === '') {
         $uploadPath = $hinh_minh_hoa;
     }
-    $sql = "UPDATE monan SET TenMon = '$ten_mon', DonGia = '$don_gia', HinhMinhHoa = '$uploadPath', CongThuc = '$cong_thuc', ngaytao = '$ngay_tao' WHERE MaMon = '$ma_mon'";
+    $sql = "UPDATE monan SET TenMon = '$ten_mon', HinhMinhHoa = '$uploadPath', CongThuc = '$cong_thuc', ngaytao = '$ngay_tao' WHERE MaMon = '$ma_mon'";
 
     if ($conn->query($sql) === TRUE) {
         echo 'Record updated successfully';
@@ -55,7 +54,6 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $ma_mon = $row['MaMon'];
     $ten_mon = $row['TenMon'];
-    $don_gia = $row['DonGia'];
     $hinh_minh_hoa = $row['HinhMinhHoa'];
     $cong_thuc = $row['CongThuc'];
     $ngay_tao = $row['ngaytao'];
@@ -70,7 +68,7 @@ if ($result->num_rows > 0) {
     require_once __DIR__ . "../../breadcrumb.php";
     ?>
     <div class="py-10">
-        <h1 class="text-2xl font-bold text-black">Sửa Món Ăn</h1>
+        <h1 class="text-2xl font-bold text-black">Cập nhật thông tin món ăn đề xuất</h1>
     </div>
 
     <form action="CapNhatThongTinMonAn.php" method="POST" enctype="multipart/form-data">
@@ -82,10 +80,7 @@ if ($result->num_rows > 0) {
             <label for="TenMon" class="block text-sm font-medium text-gray-700">Tên Món</label>
             <input type="text" name="TenMon" value="<?php echo $ten_mon; ?>" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
         </div>
-        <div class="mb-4">
-            <label for="DonGia" class="block text-sm font-medium text-gray-700">Đơn Giá</label>
-            <input type="text" name="DonGia" value="<?php echo $don_gia; ?>" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-        </div>
+
         <div class="mb-4">
             <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Đăng tải hình
                 ảnh</label>
@@ -103,7 +98,7 @@ if ($result->num_rows > 0) {
         </div>
         <!-- Form fields -->
         <button type="post" name="editThucDon" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Sửa Món Ăn
+            Cập nhật Món Ăn
         </button>
 
     </form>

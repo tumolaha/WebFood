@@ -16,7 +16,7 @@
     <div class="flex w-screen bg-blue-100/30">
         <!-- sidebar -->
         <?php include_once("./Sidebar/html/index.php"); ?>
-        <section class="content w-full px-10 ml-20 py-5">
+        <section class="content w-full px-10  py-5">
             <h1 class="text-2xl font-bold">Xem thông tin đơn đặt món</h1>
             <?php include_once("breadcrumb.php"); ?>
 
@@ -58,7 +58,7 @@
                                 echo "<script>alert('Hủy hàng thất bại')</script>";
                             }
                         }
-                        $sql = "SELECT * FROM dondatmon join monan on dondatmon.MaMon = monan.MaMon WHERE dondatmon.trangthai = 0";
+                        $sql = "SELECT * FROM dondatmon join menu on menu.MaMenu = dondatmon.MaMenu  join monan on monan.MaMon = menu.MaMon  WHERE dondatmon.trangthai = 0";
                         $result = mysqli_query($conn, $sql);
                         $total = 0;
                         while ($row = mysqli_fetch_assoc($result)) {
@@ -75,7 +75,7 @@
                             $sql1 = "SELECT * FROM monan WHERE MaMon = $id";
                             $result1 = mysqli_query($conn, $sql1);
                             $row1 = mysqli_fetch_assoc($result1);
-                            $total += ($row['DonGia'] * $row['soluong']);
+                            $total += ($row['gia'] * $row['soluong']);
 
                             echo '
                         <tr class="bg-white border-b  hover:bg-gray-50 ">
@@ -86,7 +86,7 @@
                                 ' . $row1['TenMon'] . '
                             </td>
                             <td class="px-6 py-4">
-                                ' . $row1['DonGia'] . '
+                                ' . $row['gia'] . '
                             </td>
                             <td class="px-6 py-4">
                                 ' . $row['soluong'] . '

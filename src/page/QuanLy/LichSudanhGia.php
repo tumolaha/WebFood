@@ -7,11 +7,11 @@ require_once __DIR__ . "../../dbConnection.php";
 if (isset($_GET['date'])) {
     $selectedDate = $_GET['date'];
 } else {
-    $selectedDate = date('Y-m-d');
+    $selectedDate = date("Y-m-d");
 }
 
 // Get the datmon data for the selected date
-$query = "SELECT * FROM `dondatmon` WHERE DATE(ngaydat) = '$selectedDate' ORDER BY ngaydat ASC ";
+$query = "SELECT *, dondatmon.MaNV FROM `dondatmon` LEFT JOIN menu ON dondatmon.MaMenu = menu.MaMenu LEFT JOIN monan ON menu.MaMon = monan.MaMon  WHERE DATE(ngaydat) = '$selectedDate' ORDER BY ngaydat ASC ";
 $result = mysqli_query($conn, $query);
 
 
@@ -27,32 +27,42 @@ require_once __DIR__ . "../../breadcrumb.php";
     <form action="" method="GET" class="m-4">
         <label for="date" class="mr-2">Chọn ngày:</label>
         <input type="date" id="date" name="date" value="<?php echo $selectedDate; ?>" class="px-2 py-1 border border-gray-300 rounded-md">
-        <label for="maNV" class="mr-2 ml-4">Nhập mã NV:</label>
-        <input type="text" id="maNV" name="maNV" class="px-2 py-1 border border-gray-300 rounded-md">
+
         <button type="submit" class="px-4 py-2 ml-2 bg-blue-500 text-white rounded-md">Xem</button>
     </form>
     <table class="table-auto w-full">
         <thead>
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal w-full">
-                <th class="py-3 px-6 text-left whitespace-nowrap">MaDon</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">MaNV</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">MaMon</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">NgayDat</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">TongTien</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">TrangThai</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">DanhGia</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">Mã đơn</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">Ma NV</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">mã món</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">Tên món</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">Hình ảnh</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">ngày đặt</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">trạng thái</th>
+                <th class="py-3 px-6 text-left whitespace-nowrap">đánh giá</th>
             </tr>
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
             <?php
             // Loop through order data
             while ($orderRow = mysqli_fetch_assoc($result)) {
+                $imagePath = $orderRow['HinhMinhHoa'];
+
+                $srcPosition = strpos($imagePath, 'src');
+                if ($srcPosition !== false) {
+                    $imagePath = substr($imagePath, $srcPosition);
+                }
+
+                $url = 'http://localhost/webfood/' . $imagePath;
+                $url = str_replace('\\', '/', $url);
                 echo "<tr>";
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['MaDon'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['MaNV'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['MaMon'] . "</td>";
+                echo "<td class='py-3 px-6 text-left'>" . $orderRow['TenMon'] . "</td>";
+                echo '<td class="px-6 py-4 text-gray-900"> <img class="p-8 rounded-t-lg" src="' . $url . '" alt="Image" width="200" height="200" />';
                 echo "<td class='py-3 px-6 text-left'>" . $orderRow['NgayDat'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $orderRow['TongTien'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>";
                 if ($orderRow['TrangThai'] == 0) {
                     echo "<span class='bg-yellow-500 text-white py-1 px-2 rounded'>Đã đặt</span>";
@@ -64,7 +74,12 @@ require_once __DIR__ . "../../breadcrumb.php";
                     echo "<span class='bg-blue-500 text-white py-1 px-2 rounded'>Đã thanh toán</span>";
                 }
                 echo "</td>";
-                echo "<td class='py-3 px-6 text-left'>" . $orderRow['DanhGia'] . "</td>";
+                if ($orderRow['DanhGia'] == null) {
+                    $orderRow['DanhGia'] = "Chưa đánh giá";
+                    echo "<td class='py-3 px-6 text-left'>" . $orderRow['DanhGia'] . " </td>";
+                } else {
+                    echo "<td class='py-3 px-6 text-left'>" . $orderRow['DanhGia'] . " sao </td>";
+                }
                 echo "</tr>";
             }
             ?>

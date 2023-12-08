@@ -27,7 +27,7 @@
 
         <!-- <?php include_once("EmployeeSidebar.php"); ?> -->
         <!-- content -->
-        <section class="content w-full px-10 ml-20 py-5">
+        <section class="content w-full px-10  py-5">
             <form method="POST">
                 <div class="flex cursor-pointer items-center gap-2 justify-center">
                     <p class="font-bold">Chọn ngày</p>
@@ -69,7 +69,7 @@
                     echo '$("#datepicker").val("' . $_POST['datepicker'] . '");';
                     echo '</script>';
                 }
-                $sql = "SELECT monan.* FROM monan JOIN menu ON monan.MaMon = menu.MaMon WHERE menu.ngayban = ? AND monan.trangthai = 1";
+                $sql = "SELECT monan.*,menu.gia,menu.ngayban FROM monan JOIN menu ON monan.MaMon = menu.MaMon WHERE menu.ngayban = ? AND monan.trangthai = 1";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("s", $date);
                 $stmt->execute();
@@ -87,7 +87,7 @@
                         if ($srcPosition !== false) {
                             $imagePath = substr($imagePath, $srcPosition);
                         }
-                        $sqlGetRating = "SELECT AVG(DanhGia) as diem FROM dondatmon WHERE MaMon = ?";
+                        $sqlGetRating = "SELECT AVG(DanhGia) as diem FROM dondatmon join menu on menu.MaMenu = dondatmon.MaMenu join monan on menu.MaMon = monan.MaMon WHERE monan.MaMon = ?";
                         $stmtGetRating = $conn->prepare($sqlGetRating);
                         $stmtGetRating->bind_param("i", $row['MaMon']);
                         $stmtGetRating->execute();
@@ -107,11 +107,11 @@
                         echo '</a>';
 
                         echo '<div class="flex items-center justify-between">';
-                        echo '<span class="text-sm font-bold text-gray-900 ">' . $row['DonGia'] . ' VNĐ</span>';
+                        echo '<span class="text-sm font-bold text-gray-900 ">' . $row['gia'] . ' VNĐ</span>';
 
                         echo '</div>';
                         echo '</div>';
-                        echo '<a href="order.php?id=' . $row['MaMon'] . '" class="h-10 text-sm cursor-pointer w-20 rounded-lg text-center pt-2 bg-green-500 mr-2 text-white ">Mua Hàng</a>';
+                        echo '<a href="order.php?id=' . $row['MaMon'] . '&ngayban=' . $row['ngayban'] . '" class="h-10 text-sm cursor-pointer w-20 rounded-lg text-center pt-2 bg-green-500 mr-2 text-white ">Mua Hàng</a>';
                         echo '</div>';
                         $ratingValue = round($rating);
 

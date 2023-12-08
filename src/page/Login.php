@@ -5,11 +5,11 @@ if (isset($_POST['submit'])) {
 
     $user = $_POST['user'];
     $password = $_POST['password'];
-    $query = "SELECT * FROM TaiKhoan WHERE username='$user' AND Password='$password'";
+    $query = "SELECT * FROM TaiKhoan join nhanvien on TaiKhoan.MaTK = nhanvien.MaTK WHERE username='$user' AND Password='$password'";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_array($result);
     if (mysqli_num_rows($result) == 1) {
-        $_SESSION['user'] = $user;
+        $_SESSION['user'] = $row['MaTK'];
         if ($row['PhanQuyen'] == "admin") {
             header('Location: /webfood/src/page/QuanLy/QuanLyNhanVien.php');
         } else if ($row['PhanQuyen'] == "nhanvien") {

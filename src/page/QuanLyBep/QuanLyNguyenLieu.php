@@ -35,7 +35,7 @@ $this_page_first_result = ($page - 1) * $results_per_page;
 
 // Retrieve selected results from database and display them on page
 $dateFilter = isset($_GET['date']) ? $_GET['date'] : '';
-$sql = 'SELECT nguyenlieu.*, SUM(danhsachnl.SoLuong) AS TongSoLuong FROM nguyenlieu JOIN danhsachnl ON nguyenlieu.MaNL = danhsachnl.MaNL ';
+$sql = 'SELECT nguyenlieu.*, SUM(danhsachnl.SoLuong) AS TongSoLuong FROM nguyenlieu LEFT JOIN danhsachnl ON nguyenlieu.MaNL = danhsachnl.MaNL ';
 if (!empty($dateFilter)) {
   $sql .= " WHERE NgayNhap = '$dateFilter'";
 }
@@ -53,7 +53,7 @@ $result = mysqli_query($conn, $sql);
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-2">
     <div class="pb-4  flex justify-end">
-      <a href="./ThemNguyenLieu.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm sản phẩm</a>
+      <a href="./ThemNguyenLieu.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm Nguyên Vật Liệu</a>
     </div>
     <div class="pb-4 flex justify-start gap-10">
       <form action="QuanLyNguyenLieu.php" method="GET">
@@ -71,16 +71,20 @@ $result = mysqli_query($conn, $sql);
         <th scope="col" class="px-6 py-3">
           Tên Nguyên Liệu
         </th>
+
+
         <th scope="col" class="px-6 py-3">
           Số lượng cần nhập
         </th>
+        <th scope="col" class="px-6 py-3">
+          Đơn vị tính
         </th>
         <th scope="col" class="px-6 py-3">
           Ngày cập nhật
         </th>
         <th scope="col" class="relative px-6 py-3">
-          <span class="sr-only">Edit</span>
-          </tr>
+          <span class="sr-only">Thao tác</span>
+        </th>
       </thead>
       <tbody>
         <!-- delete -->
@@ -93,8 +97,16 @@ $result = mysqli_query($conn, $sql);
             echo '<tr class="bg-white border-b dark:bg-gray-200 dark:border-gray-200 hover:bg-gray-500 text-center dark:hover:bg-gray-300">';
             echo '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaNL"] . '</th>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
-            echo '<td class="px-6 py-4 text-gray-900">' . $row["TongSoLuong"] . '</td>';
+            if ($row["TongSoLuong"] == null) {
+              $row["TongSoLuong"] = 0;
+              echo '<td class="px-6 py-4 text-gray-900">' . $row["TongSoLuong"] . '</td>';
+            } else {
+              echo '<td class="px-6 py-4 text-gray-900">' . $row["TongSoLuong"] . '</td>';
+            }
+            echo '<td class="px-6 py-4 text-gray-900">' . $row["DonViTinh"] . '</td>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["NgayNhap"] . '</td>';
+
+
             echo '<td class="px-6 flex gap-2 py-4 text-gray-900 font-bold">';
             echo '<a href="./SuaNguyenLieu.php?id=' . $row["MaNL"] . '" class="font-medium text-blue-600 hover:underline">Sửa</a>';
             echo '<button type="button" class="font-medium text-red-600 hover:underline" onclick="openModal(' . $row['MaNL'] . ')">Xoá</button>';

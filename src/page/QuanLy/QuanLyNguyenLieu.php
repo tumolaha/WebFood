@@ -36,7 +36,7 @@ $this_page_first_result = ($page - 1) * $results_per_page;
 
 
 // Retrieve selected results from database and display them on page
-$sql = 'SELECT nguyenlieu.*, SUM(danhsachnl.SoLuong) AS TongSoLuong FROM nguyenlieu JOIN danhsachnl ON nguyenlieu.MaNL = danhsachnl.MaNL GROUP BY nguyenlieu.MaNL LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
+$sql = 'SELECT nguyenlieu.*, SUM(danhsachnl.SoLuong) AS TongSoLuong FROM nguyenlieu  LEFT JOIN danhsachnl ON nguyenlieu.MaNL = danhsachnl.MaNL GROUP BY nguyenlieu.MaNL LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
 $result = mysqli_query($conn, $sql);
 // Handle delete request
 ?>
@@ -52,8 +52,7 @@ $result = mysqli_query($conn, $sql);
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-2">
     <div class="pb-4  flex justify-end">
-      <a href="./ThemNguyenLieu.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm
-        sản phẩm</a>
+      <a href="./ThemNguyenLieu.php" class="text-white mt-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Thêm Nguyên Vật Liệu</a>
     </div>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase text-center bg-gray-300">
@@ -70,8 +69,11 @@ $result = mysqli_query($conn, $sql);
         <th scope="col" class="px-6 py-3">
           Số lượng cần nhập
         </th>
+        <th scope="col" class="px-6 py-3">
+          Đơn vị tính
+        </th>
         <th scope="col" class="relative px-6 py-3">
-          <span class="sr-only">Edit</span>
+          <span class="sr-only">Thao tác</span>
         </th>
       </thead>
       <tbody>
@@ -83,7 +85,13 @@ $result = mysqli_query($conn, $sql);
             echo '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black">' . $row["MaNL"] . '</th>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["TenNL"] . '</td>';
             echo '<td class="px-6 py-4 text-gray-900">' . $row["NgayNhap"] . '</td>';
-            echo '<td class="px-6 py-4 text-gray-900">' . $row["TongSoLuong"] . '</td>';
+            if ($row["TongSoLuong"] == NULL) {
+              echo '<td class="px-6 py-4 text-gray-900">0</td>';
+            } else
+              echo '<td class="px-6 py-4 text-gray-900">' . $row["TongSoLuong"] . '</td>';
+
+
+            echo '<td class="px-6 py-4 text-gray-900">' . $row["DonViTinh"] . '</td>';
             echo '<td class="px-6 flex gap-2 py-4 text-gray-900 font-bold">';
             echo '<a href="./SuaNguyenLieu.php?id=' . $row["MaNL"] . '" class="font-medium text-blue-600 hover:underline">Sửa</a>';
             echo '<button type="button" class="font-medium text-red-600 hover:underline" onclick="openModal(' . $row['MaNL'] . ')">Xoá</button>';

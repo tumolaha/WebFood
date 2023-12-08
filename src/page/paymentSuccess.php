@@ -59,7 +59,7 @@
 
 
             ?>
-            <section class="content w-full px-10 ml-20 py-5">
+            <section class="content w-full px-10  py-5">
 
                 <div class="bg-gray-100 h-screen">
                     <div class="bg-white p-6  md:mx-auto">

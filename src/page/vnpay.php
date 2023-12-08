@@ -14,7 +14,7 @@
         $maDon = $_GET['MaDon'];
         $month = $_GET['Thang'];
         $year = $_GET['Nam'];
-        $sql = "SELECT * FROM dondatmon join monan on monan.MaMon = dondatmon.MaMon WHERE dondatmon.trangthai = 1 and MONTH(NgayDat) = $month and YEAR(NgayDat) = $year";
+        $sql = "SELECT * FROM dondatmon join menu on menu.MaMenu = dondatmon.MaMenu WHERE dondatmon.trangthai = 1 and MONTH(NgayDat) = $month and YEAR(NgayDat) = $year";
         $result = mysqli_query($conn, $sql);
         // sau khi query result là một array
         $ids = "";
@@ -22,7 +22,7 @@
         while ($row = mysqli_fetch_assoc($result)) {
             // Cộng chuỗi các mã đơn phân cách nhau bởi dấu /
             $ids .= $row['MaDon'] . '/';
-            $total = $total + $row['DonGia'] * $row['soluong'];
+            $total = $total + $row['gia'] * $row['soluong'];
         }
 
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";

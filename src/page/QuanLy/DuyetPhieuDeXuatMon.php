@@ -65,7 +65,6 @@ require_once __DIR__ . "../../breadcrumb.php";
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal w-full">
                 <th class="py-3 px-6 text-left whitespace-nowrap">Mã Món</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Tên Món</th>
-                <th class="py-3 px-6 text-left whitespace-nowrap">Giá</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Hình ảnh</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Công thức</th>
                 <th class="py-3 px-6 text-left whitespace-nowrap">Nguyên Liệu</th>
@@ -96,13 +95,7 @@ require_once __DIR__ . "../../breadcrumb.php";
                 echo "<tr>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['MaMon'] . "</td>";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['TenMon'] . "</td>";
-                echo "<td class='py-3 px-6 text-left'>";
-                if ($menuRow['DonGia'] === null) {
-                    echo "Chưa cập nhật";
-                } else {
-                    echo $menuRow['DonGia'];
-                }
-                echo "</td>";
+
                 echo "<td class='py-3 px-6 text-left'>";
                 if ($url === null) {
                     echo "Chưa cập nhật";
@@ -138,17 +131,16 @@ require_once __DIR__ . "../../breadcrumb.php";
                 echo "<td class='py-3 px-6 text-left'>" . $menuRow['ngaytao'] . "</td>";
 
                 // Add the approve button
+
                 echo "<td class='py-3 px-6 text-left'>";
-                echo "<form method='POST'  action='../../page/QuanLy/DuyetPhieuDeXuatMon.php' class='flex flex-nowrap'>";
+                echo "<form method='POST' action='../../page/QuanLy/DuyetPhieuDeXuatMon.php' class='flex flex-nowrap'>";
                 echo "<input type='hidden' name='maMon' value='" . $menuRow['MaMon'] . "'>";
-                echo "<select name='trangThai'>";
-                echo "<option value='0' " . ($menuRow['trangthai'] == 0 ? "selected" : "") . ">Chưa duyệt</option>";
-                echo "<option value='1' " . ($menuRow['trangthai'] == 1 ? "selected" : "") . ">Đã duyệt</option>";
-                echo "</select>";
-                echo "<button class='ml-4' type='submit' style='background-color: blue; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
-
+                if ($menuRow['trangthai'] == 0) {
+                    echo "<button name='trangThai' value='1' class='ml-4' type='submit' style='background-color: blue; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Duyệt</button>";
+                } else {
+                    echo "<button name='trangThai' value='0' class='ml-4' type='submit' style='background-color: red; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;'>Không Duyệt</button>";
+                }
                 echo "</form>";
-
                 echo "</td>";
                 //    cập nhật thông in món ăn
                 echo "<td class='py-3 px-6 text-left'>";
